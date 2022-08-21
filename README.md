@@ -1,5 +1,7 @@
 # xash3ds-installscript
 
+Origin of this is https://git.la10cy.net/DeltaLima/xash3ds-installscript
+
 This script install github.com/FGWS/xash3d-fgws automatically under Ubuntu 20.04 and Debian 11 (those i tested so far).
 
 To install the server run following command in the directory where you checked this git into
