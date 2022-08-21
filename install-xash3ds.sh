@@ -12,6 +12,7 @@ jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_vers
 if [ -z "$1" ]
 then
     XASHDS_PORT=27015
+    CLIENT=false
 else
     CLIENT=true
 fi
@@ -29,6 +30,13 @@ XASH3D_BASEDIR=$(pwd)/build
 mkdir -p $XASH3D_BASEDIR/result
 
 # Prerequisits satisfied?
+if [ $CLIENT == false ]
+then 
+    WAF_OPTION="-d"
+else
+    WAF_OPTION=""
+    export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
+fi
 sudo dpkg --add-architecture i386
 apt-get install -y --no-install-recommends build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip
 
@@ -41,12 +49,7 @@ cd xash3d-fwgs
 ## old if you use deprecated xash3d
 ## cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
 ## make
-if [ $CLIENT = false ]
-then 
-    WAF_OPTION=""
-else
-    WAF_OPTION="-d"
-fi
+
 
 WAF_OPTION
 
