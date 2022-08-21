@@ -42,7 +42,7 @@ quit" > $XASH3D_BASEDIR/steam/hlds.install
 curl -sL "$steamcmd_url" | tar xzvf - 
 ./steamcmd.sh +runscript hlds.install
 
-## get half-life data from steam
+## i really dont know why, but in FGWS dockerfile they overwrite the fresh pulled steam hlds stuff with the release specific one.
 curl -sLJO "$hlds_url" 
 unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
 cp -R "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
