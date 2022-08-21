@@ -35,7 +35,7 @@ cd xash3d-fwgs
 ./waf configure -T release -d
 ./waf make
 ./waf install --destdir=bin/
-mv bin/* $XASH3D_BASEDIR/result/
+
 
 ## here we fetch half-life from steam server
 mkdir -p $XASH3D_BASEDIR/steam
@@ -52,8 +52,10 @@ quit" > $XASH3D_BASEDIR/steam/hlds.install
 
 ## fetch steamcmd
 curl -sL "$steamcmd_url" | tar xzvf - 
+## run half-life download from steam server with steamcmd
 ./steamcmd.sh +runscript hlds.install
-
+## place Xash3D binaries in result and overwrite all
+cp -R $XASH3D_BASEDIR/xash3d-fgws/bin/* $XASH3D_BASEDIR/result/
 ## this is just another source you can use instead of steamcmd. 
 ## curl -sLJO "$hlds_url" 
 ## unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
