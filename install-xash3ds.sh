@@ -80,6 +80,7 @@ cp -R $XASH3D_BASEDIR/xash3d-fwgs/bin/* $XASH3D_BASEDIR/result/
 
 touch $XASH3D_BASEDIR/result/valve/listip.cfg
 touch $XASH3D_BASEDIR/result/valve/banned.cfg
+# it seems that the build actually (21.08.2022) is buggy and does not exec server.cfg by its own
 echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
 chmod +x $XASH3D_BASEDIR/result/start.sh
 cd $XASH3D_BASEDIR/result
