@@ -13,15 +13,15 @@ if [ -z "$1" ]
 then
     XASHDS_PORT=27015
 else
-    XASHDS_PORT=$1
+    CLIENT=true
 fi
 
-if [ "$2" == "client" ]
-then
-    CLIENT=true
-else 
-    CLIENT=false
-fi
+#if [ "$2" == "client" ]
+#then
+#    CLIENT=true
+#else 
+#    CLIENT=false
+#fi
 
 
 
