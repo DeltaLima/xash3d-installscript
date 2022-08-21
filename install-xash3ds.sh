@@ -9,6 +9,13 @@ metamod_url="https://github.com/mittorn/metamod-p/releases/download/1/metamod.so
 amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.tar.gz"
 jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
 
+if [ $1 -z ]
+then
+    XASHDS_PORT=27015
+else
+    XASHDS_PORT=$1
+fi
+
 XASH3D_BASEDIR=$(pwd)/build
 mkdir -p $XASH3D_BASEDIR/result
 
@@ -50,6 +57,6 @@ cp -R "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
 
 touch $XASH3D_BASEDIR/result/valve/listip.cfg
 touch $XASH3D_BASEDIR/result/valve/banned.cfg
-echo "./xash3ds +ip 0.0.0.0:27015 -pingboost 1" > $XASH3D_BASEDIR/result/start.sh
+echo "./xash3ds +ip 0.0.0.0 +port $XASHDS_PORT -pingboost 1 -timeout 3" > $XASH3D_BASEDIR/result/start.sh
 chmod +x $XASH3D_BASEDIR/result/start.sh
 cd $XASH3D_BASEDIR/result
