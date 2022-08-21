@@ -40,7 +40,7 @@ else
     export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 fi
 sudo dpkg --add-architecture i386
-apt-get install -y --no-install-recommends 
+apt-get install -y --no-install-recommends $PACKAGES
 
 ## compile xash3ds
 # go to build directory
