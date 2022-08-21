@@ -80,6 +80,6 @@ cp -R $XASH3D_BASEDIR/xash3d-fwgs/bin/* $XASH3D_BASEDIR/result/
 
 touch $XASH3D_BASEDIR/result/valve/listip.cfg
 touch $XASH3D_BASEDIR/result/valve/banned.cfg
-echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp" > $XASH3D_BASEDIR/result/start.sh
+echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
 chmod +x $XASH3D_BASEDIR/result/start.sh
 cd $XASH3D_BASEDIR/result
