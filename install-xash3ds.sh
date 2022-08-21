@@ -57,6 +57,6 @@ cp -R "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
 
 touch $XASH3D_BASEDIR/result/valve/listip.cfg
 touch $XASH3D_BASEDIR/result/valve/banned.cfg
-echo "./xash3ds +ip 0.0.0.0 +port $XASHDS_PORT -pingboost 1 -timeout 3" > $XASH3D_BASEDIR/result/start.sh
+echo "./xashds +ip 0.0.0.0 +port $XASHDS_PORT -pingboost 1 -timeout 3" > $XASH3D_BASEDIR/result/start.sh
 chmod +x $XASH3D_BASEDIR/result/start.sh
 cd $XASH3D_BASEDIR/result
