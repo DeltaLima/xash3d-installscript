@@ -9,36 +9,34 @@ metamod_url="https://github.com/mittorn/metamod-p/releases/download/1/metamod.so
 amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.tar.gz"
 jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
 
-if [ -z "$1" ]
+if [ ! -z "$1" ]
 then
-    XASHDS_PORT=27015
-    CLIENT=false
-    PACKAGES="build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip"
-else
-    CLIENT=true
-    PACKAGES="build-essential gcc-multilib g++-multilib python libsdl2-dev:i386 libfontconfig-dev:i386 libfreetype6-dev:i386"
+    if [ "$1" == "client" ]
+    then
+        CLIENT=true
+        PACKAGES="build-essential gcc-multilib g++-multilib python libsdl2-dev:i386 libfontconfig-dev:i386 libfreetype6-dev:i386"
+        WAF_OPTION=""
+        export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
+    else 
+        CLIENT=false
+        XASHDS_PORT=27015
+        CLIENT=false
+        PACKAGES="build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip"
+        WAF_OPTION="-d"
+    fi   
 fi
-
-#if [ "$2" == "client" ]
-#then
-#    CLIENT=true
-#else 
-#    CLIENT=false
-#fi
-
-
 
 XASH3D_BASEDIR=$(pwd)/build
 mkdir -p $XASH3D_BASEDIR/result
 
 # Prerequisits satisfied?
-if [ $CLIENT == false ]
-then 
-    WAF_OPTION="-d"
-else
-    WAF_OPTION=""
-    export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
-fi
+#if [ $CLIENT == false ]
+#then 
+#    
+#else
+#
+#fi
+
 sudo dpkg --add-architecture i386
 apt-get install -y --no-install-recommends $PACKAGES
 
