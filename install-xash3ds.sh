@@ -32,7 +32,7 @@ cd xash3d-fwgs
 ## old if you use deprecated xash3d
 ## cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
 ## make
-./waf configure -T release
+./waf configure -T release -d
 ./waf make
 ./waf install --destdir=bin/
 mv bin/* $XASH3D_BASEDIR/result/
