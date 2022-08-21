@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 hlds_build=8308
 amxmod_version=1.8.2
