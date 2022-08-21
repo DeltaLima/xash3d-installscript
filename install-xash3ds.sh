@@ -13,8 +13,10 @@ if [ -z "$1" ]
 then
     XASHDS_PORT=27015
     CLIENT=false
+    PACKAGES="build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip"
 else
     CLIENT=true
+    PACKAGES="build-essential gcc-multilib g++-multilib python libsdl2-dev:i386 libfontconfig-dev:i386 libfreetype6-dev:i386"
 fi
 
 #if [ "$2" == "client" ]
@@ -38,7 +40,7 @@ else
     export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 fi
 sudo dpkg --add-architecture i386
-apt-get install -y --no-install-recommends build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip
+apt-get install -y --no-install-recommends 
 
 ## compile xash3ds
 # go to build directory
@@ -49,9 +51,6 @@ cd xash3d-fwgs
 ## old if you use deprecated xash3d
 ## cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
 ## make
-
-
-WAF_OPTION
 
 ./waf configure -T release $WAF_OPTION
 ./waf make
