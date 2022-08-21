@@ -51,7 +51,7 @@ cd xash3d-fwgs
 ## make
 
 ./waf configure -T release $WAF_OPTION
-./waf make
+./waf build
 ./waf install --destdir=bin/
 
 
