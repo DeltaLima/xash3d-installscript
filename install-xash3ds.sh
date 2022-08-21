@@ -13,7 +13,7 @@ XASH3D_BASEDIR=$(pwd)/build/xashds
 mkdir -p $XASH3D_BASEDIR
 
 sudo dpkg --add-architecture i386
-apt-get install -y --no-install-recommends build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1 libstdc++6:i386 python unzip xz-utils zip
+apt-get install -y --no-install-recommends build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip
 git clone --recursive https://github.com/FWGS/xash3d
 mkdir -p xash3d/build
 
