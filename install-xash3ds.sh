@@ -16,6 +16,15 @@ else
     XASHDS_PORT=$1
 fi
 
+if [ "$2" == "client" ]
+then
+    CLIENT=true
+else 
+    CLIENT=false
+fi
+
+
+
 XASH3D_BASEDIR=$(pwd)/build
 mkdir -p $XASH3D_BASEDIR/result
 
@@ -32,7 +41,16 @@ cd xash3d-fwgs
 ## old if you use deprecated xash3d
 ## cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
 ## make
-./waf configure -T release -d
+if [ $CLIENT = false ]
+then 
+    WAF_OPTION=""
+else
+    WAF_OPTION="-d"
+fi
+
+WAF_OPTION
+
+./waf configure -T release $WAF_OPTION
 ./waf make
 ./waf install --destdir=bin/
 
