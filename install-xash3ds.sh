@@ -9,7 +9,7 @@ metamod_url="https://github.com/mittorn/metamod-p/releases/download/1/metamod.so
 amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.tar.gz"
 jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
 
-if [ $1 -z ]
+if [ "$1" -z ]
 then
     XASHDS_PORT=27015
 else
