@@ -26,17 +26,21 @@ apt-get install -y --no-install-recommends build-essential  ca-certificates  cma
 ## compile xash3ds
 # go to build directory
 cd $XASH3D_BASEDIR
-git clone --recursive https://github.com/FWGS/xash3d
-mkdir -p xash3d/build
+git clone --recursive https://github.com/FWGS/xash3d-fwgs
+mkdir -p xash3d-fwgs/bin/
+cd xash3d-fwgs
+## old if you use deprecated xash3d
+## cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
+## make
+./waf configure -T release
+./waf make
+./waf install --destdir=bin/
+mv bin/* $XASH3D_BASEDIR/result/
 
-cd xash3d/build
-cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
-make
-mv engine/xash3d $XASH3D_BASEDIR/result/xashds
-
-## get half-life data from steam
+## here we fetch half-life from steam server
 mkdir -p $XASH3D_BASEDIR/steam
 cd $XASH3D_BASEDIR/steam
+## an steamcmd automation
 echo "login anonymous
 force_install_dir $XASH3D_BASEDIR/result
 app_set_config 90 mod valve
@@ -46,17 +50,18 @@ app_update 90 validate
 app_update 90 validate
 quit" > $XASH3D_BASEDIR/steam/hlds.install
 
+## fetch steamcmd
 curl -sL "$steamcmd_url" | tar xzvf - 
 ./steamcmd.sh +runscript hlds.install
 
-## i really dont know why, but in FGWS dockerfile they overwrite the fresh pulled steam hlds stuff with the release specific one.
-curl -sLJO "$hlds_url" 
-unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
-cp -R "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
+## this is just another source you can use instead of steamcmd. 
+## curl -sLJO "$hlds_url" 
+## unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
+## cp -R "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
 
 
 touch $XASH3D_BASEDIR/result/valve/listip.cfg
 touch $XASH3D_BASEDIR/result/valve/banned.cfg
-echo "./xashds +ip 0.0.0.0 +port $XASHDS_PORT -pingboost 1 -timeout 3" > $XASH3D_BASEDIR/result/start.sh
+echo "./xash +ip 0.0.0.0 +port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp" > $XASH3D_BASEDIR/result/start.sh
 chmod +x $XASH3D_BASEDIR/result/start.sh
 cd $XASH3D_BASEDIR/result
