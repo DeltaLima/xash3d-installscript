@@ -25,13 +25,13 @@ mkdir -p xash3d/build
 cd xash3d/build
 cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
 make
-mv engine/xash3d $XASH3D_BASEDIR/result/xash3ds
+mv engine/xash3d $XASH3D_BASEDIR/result/xashds
 
 ## get half-life data from steam
 mkdir -p $XASH3D_BASEDIR/steam
 cd $XASH3D_BASEDIR/steam
 echo "login anonymous
-force_install_dir ./xashds
+force_install_dir $XASH3D_BASEDIR/result
 app_set_config 90 mod valve
 app_update 90
 app_update 90
@@ -42,9 +42,10 @@ quit" > $XASH3D_BASEDIR/steam/hlds.install
 curl -sL "$steamcmd_url" | tar xzvf - 
 ./steamcmd.sh +runscript hlds.install
 
+## get half-life data from steam
 curl -sLJO "$hlds_url" 
-unzip "hlds_build_$hlds_build.zip" -d "/opt/steam/hlds_build_$hlds_build" 
-mv "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
+unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
+cp -R "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
 
 
 touch $XASH3D_BASEDIR/result/valve/listip.cfg
