@@ -41,16 +41,16 @@ sudo apt-get install -y --no-install-recommends $PACKAGES
 ## compile xash3ds
 # go to build directory
 cd $XASH3D_BASEDIR
-git clone --recursive https://github.com/FWGS/xash3d-fwgs
-mkdir -p xash3d-fwgs/bin/
-cd xash3d-fwgs
+git clone --recursive https://github.com/FWGS/xash3d
+mkdir -p xash3d/bin/
+cd xash3d/bin/
 ## old if you use deprecated xash3d
-## cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
-## make
+cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
+make
 
-./waf configure -T release $WAF_OPTION
-./waf build
-./waf install --destdir=bin/
+#./waf configure -T release $WAF_OPTION
+#./waf build
+#./waf install --destdir=bin/
 
 
 ## here we fetch half-life from steam server
@@ -67,17 +67,19 @@ app_update 90 validate
 quit" > $XASH3D_BASEDIR/steam/hlds.install
 
 ## fetch steamcmd
-curl -sL "$steamcmd_url" | tar xzvf - 
-## run half-life download from steam server with steamcmd
-./steamcmd.sh +runscript hlds.install
-## place Xash3D binaries in result and overwrite all
-cp -R $XASH3D_BASEDIR/xash3d-fwgs/bin/* $XASH3D_BASEDIR/result/
+##curl -sL "$steamcmd_url" | tar xzvf - 
+#### run half-life download from steam server with steamcmd
+##./steamcmd.sh +runscript hlds.install
+#### place Xash3D binaries in result and overwrite all
 ## this is just another source you can use instead of steamcmd. 
-## curl -sLJO "$hlds_url" 
-## unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
-## cp -R "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
+echo wait
+read 
+curl -sLJO "$hlds_url" 
+unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
+cp -R "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
 
 
+cp -R $XASH3D_BASEDIR/xash3d/bin/engine/xash3d $XASH3D_BASEDIR/result/xash
 touch $XASH3D_BASEDIR/result/valve/listip.cfg
 touch $XASH3D_BASEDIR/result/valve/banned.cfg
 # it seems that the build actually (21.08.2022) is buggy and does not exec server.cfg by its own
