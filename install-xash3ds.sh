@@ -36,7 +36,7 @@ mkdir -p $XASH3D_BASEDIR/result
 #fi
 
 sudo dpkg --add-architecture i386
-apt-get install -y --no-install-recommends $PACKAGES
+sudo apt-get install -y --no-install-recommends $PACKAGES
 
 ## compile xash3ds
 # go to build directory
