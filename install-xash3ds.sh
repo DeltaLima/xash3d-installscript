@@ -104,6 +104,7 @@ then
       echo "= Creating start.sh script for dedicated server in build/result ="
       echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
       chmod +x $XASH3D_BASEDIR/result/start.sh
+      echo "= If you need an example config for a public server, have a look into https://github.com/FWGS/xashds-docker/tree/master/valve ="
 fi
 
 echo "= DONE! If everything went well an no errors occured you can just run your game/server from $XASH3D_BASEDIR/result/ ="
