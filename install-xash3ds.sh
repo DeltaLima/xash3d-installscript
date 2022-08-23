@@ -88,7 +88,7 @@ then
     ## this is just another source you can use instead of steamcmd. 
     curl -LJO "$hlds_url" 
     unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
-    cp -R "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
+    cp -R "hlds_build_$hlds_build/hlds_build_$hlds_build"/* $XASH3D_BASEDIR/result/
 fi
 
 ## copy xash3d binaries to result
