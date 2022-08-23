@@ -29,4 +29,6 @@ or the game to have a frag
 ./xash3d
 ```
 
+Have a look on my servers at HL.LA10CY.NET :) Happy fragging!
+
 This script is based on the work of https://github.com/FWGS/xashds-docker/ and https://github.com/FGWS/xash3d-fgws
