@@ -1,6 +1,6 @@
 #!/bin/bash
 
-hlds_build=8308
+hlds_build=8684
 amxmod_version=1.8.2
 jk_botti_version=1.43
 steamcmd_url="https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz"
@@ -10,18 +10,37 @@ amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.ta
 jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
 
 
-if [ "$1" == "client" ]
-  then
+case $1 in 
+"client")
       CLIENT=true
-      PACKAGES="git curl build-essential gcc-multilib g++-multilib python2 libsdl2-dev:i386 libfontconfig-dev:i386 libfreetype6-dev:i386"
+      PACKAGES="git curl build-essential gcc-multilib g++-multilib python python2 libsdl2-dev:i386 libfontconfig-dev:i386 libfreetype6-dev:i386"
       WAF_OPTION=""
       export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
-  else 
-      CLIENT=false
+;;
+"server")
+CLIENT=false
       XASHDS_PORT=27015
       CLIENT=false
       PACKAGES="build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip"
       WAF_OPTION="-d"
+;;
+default)
+      echo "Description: Script to install an full playable Xash3D-FWGS client or Xash3D dedicated server"
+      echo "Usage: ./$0 [server|client]"
+      echo "Server tested on Debian 11 ; Client tested on Ubuntu 20.04"
+      echo ""
+      echo "Resources we are using:"
+      echo $steamcmd_url
+      echo $hlds_url
+      echo https://github.com/FWGS/xash3d-fwgs
+      exit 1
+;;
+
+if [ "$1" == "client" ]
+  then
+
+  else 
+      
 fi
 
 XASH3D_BASEDIR=$(pwd)/build
@@ -70,14 +89,20 @@ quit" > $XASH3D_BASEDIR/steam/hlds.install
 ## fetch steamcmd
 curl -sL "$steamcmd_url" | tar xzvf - 
 ## run half-life download from steam server with steamcmd
-./steamcmd.sh +runscript hlds.install
+## If grep find Error then fetch the hlds zip from github
+if [ ./steamcmd.sh +runscript hlds.install | grep Error ]
+then
+    echo "There was an error fetching hlds with steamcmd. Fetching it from github"
+    echo $hlds_url
+    ## this is just another source you can use instead of steamcmd. 
+    curl -LJO "$hlds_url" 
+    unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
+    cp -R "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
+fi
+
+## copy xash3d binaries to result
 ## place Xash3D binaries in result and overwrite all
 cp -R $XASH3D_BASEDIR/xash3d-fwgs/bin/* $XASH3D_BASEDIR/result/
-## this is just another source you can use instead of steamcmd. 
-## curl -sLJO "$hlds_url" 
-## unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
-## cp -R "hlds_build_$hlds_build/hlds"/* $XASH3D_BASEDIR/result/
-
 
 touch $XASH3D_BASEDIR/result/valve/listip.cfg
 touch $XASH3D_BASEDIR/result/valve/banned.cfg
