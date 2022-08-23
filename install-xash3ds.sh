@@ -24,7 +24,7 @@ CLIENT=false
       PACKAGES="build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip"
       WAF_OPTION="-d"
 ;;
-default)
+*)
       echo "Description: Script to install an full playable Xash3D-FWGS client or Xash3D dedicated server"
       echo "Usage: ./$0 [server|client]"
       echo "Server tested on Debian 11 ; Client tested on Ubuntu 20.04"
