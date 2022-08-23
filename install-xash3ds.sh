@@ -14,7 +14,7 @@ case $1 in
 "client")
       CLIENT=true
       PACKAGES="git curl build-essential gcc-multilib g++-multilib python python2 libsdl2-dev:i386 libfontconfig-dev:i386 libfreetype6-dev:i386"
-      WAF_OPTION=""
+      WAF_OPTION="--enable-utils --enable-stb"
       export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 ;;
 "server")
