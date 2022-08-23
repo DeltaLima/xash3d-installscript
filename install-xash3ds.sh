@@ -37,15 +37,17 @@ CLIENT=false
 ;;
 esac
 
+echo "= Creating directories ="
 XASH3D_BASEDIR=$(pwd)/build
 mkdir -p $XASH3D_BASEDIR/result
 
 
-
+echo "= Performing apt install ="
 sudo dpkg --add-architecture i386
 sudo apt update
 sudo apt-get install -y --no-install-recommends $PACKAGES
 
+echo "= Compiling xash3d-fwgs ="
 ## compile xash3ds
 # go to build directory
 cd $XASH3D_BASEDIR
@@ -74,13 +76,14 @@ app_update 90 validate
 app_update 90 validate
 quit" > $XASH3D_BASEDIR/steam/hlds.install
 
+echo "= fetching hlds with steamcmd ="
 ## fetch steamcmd
 curl -sL "$steamcmd_url" | tar xzvf - 
 ## run half-life download from steam server with steamcmd
 ## If grep find Error then fetch the hlds zip from github
 if ./steamcmd.sh +runscript hlds.install | grep Error
 then
-    echo "There was an error fetching hlds with steamcmd. Fetching it from github"
+    echo "= !! There was an error fetching hlds with steamcmd. Fetching it from github !! ="
     echo $hlds_url
     ## this is just another source you can use instead of steamcmd. 
     curl -LJO "$hlds_url" 
@@ -90,11 +93,18 @@ fi
 
 ## copy xash3d binaries to result
 ## place Xash3D binaries in result and overwrite all
+echo "= copy xash3d binaries to build/result"
 cp -R $XASH3D_BASEDIR/xash3d-fwgs/bin/* $XASH3D_BASEDIR/result/
 
 touch $XASH3D_BASEDIR/result/valve/listip.cfg
 touch $XASH3D_BASEDIR/result/valve/banned.cfg
 # it seems that the build actually (21.08.2022) is buggy and does not exec server.cfg by its own
-echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
-chmod +x $XASH3D_BASEDIR/result/start.sh
-cd $XASH3D_BASEDIR/result
+if [ "$1" == "server" ]
+then
+      echo "= Creating start.sh script for dedicated server in build/result ="
+      echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
+      chmod +x $XASH3D_BASEDIR/result/start.sh
+fi
+
+echo "= DONE! If everything went well an no errors occured you can just run your game/server from $XASH3D_BASEDIR/result/ ="
+echo "= starting server: ./start.sh ; starting game client ./xash3d ="
