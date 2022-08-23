@@ -25,8 +25,10 @@ CLIENT=false
       WAF_OPTION="-d"
 ;;
 *)
-      echo "Description: Script to install an full playable Xash3D-FWGS client or Xash3D dedicated server"
       echo "Usage: ./$0 [server|client]"
+      echo ""
+      echo "Description: Script to install an Xash3D-FWGS client or Xash3D dedicated server with game data from steamcmd"
+      echo "Origin: https://git.la10cy.net/DeltaLima/xash3ds-installscript"
       echo "Server tested on Debian 11 ; Client tested on Ubuntu 20.04"
       echo ""
       echo "Resources we are using:"
