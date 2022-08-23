@@ -78,7 +78,7 @@ quit" > $XASH3D_BASEDIR/steam/hlds.install
 curl -sL "$steamcmd_url" | tar xzvf - 
 ## run half-life download from steam server with steamcmd
 ## If grep find Error then fetch the hlds zip from github
-if [ ./steamcmd.sh +runscript hlds.install | grep Error ]
+if ./steamcmd.sh +runscript hlds.install | grep Error
 then
     echo "There was an error fetching hlds with steamcmd. Fetching it from github"
     echo $hlds_url
