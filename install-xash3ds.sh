@@ -36,23 +36,11 @@ default)
       exit 1
 ;;
 
-if [ "$1" == "client" ]
-  then
-
-  else 
-      
-fi
 
 XASH3D_BASEDIR=$(pwd)/build
 mkdir -p $XASH3D_BASEDIR/result
 
-# Prerequisits satisfied?
-#if [ $CLIENT == false ]
-#then 
-#    
-#else
-#
-#fi
+
 
 sudo dpkg --add-architecture i386
 sudo apt update
