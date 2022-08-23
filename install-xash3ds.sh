@@ -83,6 +83,7 @@ echo "= fetching hlds with steamcmd ="
 curl -L "$steamcmd_url" | tar xzvf - 
 ## run half-life download from steam server with steamcmd
 ## If grep find Error then fetch the hlds zip from github
+echo "= This can take a while depending ony your connection ="
 if ./steamcmd.sh +runscript hlds.install | grep Error
 then
     echo "= !! There was an error fetching hlds with steamcmd. Fetching it from github !! ="
