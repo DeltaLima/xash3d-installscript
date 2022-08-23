@@ -35,7 +35,7 @@ default)
       echo https://github.com/FWGS/xash3d-fwgs
       exit 1
 ;;
-
+esac
 
 XASH3D_BASEDIR=$(pwd)/build
 mkdir -p $XASH3D_BASEDIR/result
