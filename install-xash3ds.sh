@@ -13,7 +13,7 @@ jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_vers
 if [ "$1" == "client" ]
   then
       CLIENT=true
-      PACKAGES="build-essential gcc-multilib g++-multilib python libsdl2-dev:i386 libfontconfig-dev:i386 libfreetype6-dev:i386"
+      PACKAGES="git curl build-essential gcc-multilib g++-multilib python2 libsdl2-dev:i386 libfontconfig-dev:i386 libfreetype6-dev:i386"
       WAF_OPTION=""
       export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
   else 
@@ -36,6 +36,7 @@ mkdir -p $XASH3D_BASEDIR/result
 #fi
 
 sudo dpkg --add-architecture i386
+sudo apt update
 sudo apt-get install -y --no-install-recommends $PACKAGES
 
 ## compile xash3ds
