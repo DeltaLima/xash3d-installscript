@@ -6,7 +6,7 @@ This script install an ready to  play github.com/FGWS/xash3d-fgws automatically 
 Just run the script and play :) 
 
 ```
-Usage: ./install-xash3ds.sh [server|client]
+Usage: ./install-xash3ds.sh [server|client] [install|update]
 
 Description: Script to install an Xash3D-FWGS client or Xash3D dedicated server with game data from steamcmd.
 Server tested on Debian 11 ; Client tested on Ubuntu 20.04
@@ -20,12 +20,12 @@ https://github.com/FWGS/xash3d-fwgs
 
 To install the server run following command in the directory where you checked this git into
 ```
-bash install-xash3ds.sh server
+bash install-xash3ds.sh server install
 ```
 
 To install the FULL PLAYABLE client with all game data (steamcmd thx <3) run this
 ```
-bash install-xash3ds.sh client
+bash install-xash3ds.sh client install
 ```
 
 Your server or gamefiles (you can run server first and then rerun afterwards with client to get the full package) are in
@@ -41,6 +41,11 @@ from there you can run the server
 or the game to have a frag
 ```
 ./xash3d
+```
+
+You can easly update both, client and server (example client):
+```
+bash install-xash3ds.sh client update
 ```
 
 Have a look on my servers at https://HL.LA10CY.NET :) Happy fragging!
