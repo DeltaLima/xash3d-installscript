@@ -59,7 +59,7 @@ XASH3D_BASEDIR=$(pwd)/build
 XASH3D_RESULTDIR=$XASH3D_BASEDIR/result
 test -d $XASH3D_RESULTDIR || mkdir -p $XASH3D_RESULTDIR
 
-if [ "$2" == "install"]
+if [ "$2" == "install" ]
 then
 	echo "= Performing apt install ="
 	sudo dpkg --add-architecture i386
