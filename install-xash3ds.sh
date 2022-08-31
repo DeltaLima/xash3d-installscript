@@ -79,6 +79,7 @@ case $2 in
 		;;
 	"update")
 		cd xash3d-fwgs
+		./waf clean
 		rm bin/*
 		git pull
 		;;
