@@ -87,9 +87,14 @@ case $2 in
 		exit 1
 		;;
 esac
-## old if you use deprecated xash3d
+
+##   oldstuff  ##
+## old if you use deprecated xash3d 0.19.3
 ## cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
 ## make
+##   oldstuff  ##
+
+## build 
 ./waf configure -T release $WAF_OPTION
 ./waf -p build
 ./waf install --destdir=bin/
@@ -132,14 +137,15 @@ fi
 echo "= copy xash3d binaries to build/result"
 cp -R $XASH3D_BASEDIR/xash3d-fwgs/bin/* $XASH3D_RESULTDIR
 
-touch $XASH3D_BASEDIR/result/valve/listip.cfg
-touch $XASH3D_BASEDIR/result/valve/banned.cfg
+
 # it seems that the build actually (21.08.2022) is buggy and does not exec server.cfg by its own
 if [ "$1" == "server" ] && [ "$2" == "install" ]
 then
       echo "= Creating start.sh script for dedicated server in build/result ="
       echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
       chmod +x $XASH3D_BASEDIR/result/start.sh
+	  touch $XASH3D_BASEDIR/result/valve/listip.cfg
+      touch $XASH3D_BASEDIR/result/valve/banned.cfg
       echo "= If you need an example config for a public server, have a look into https://github.com/FWGS/xashds-docker/tree/master/valve ="
 fi
 
