@@ -91,7 +91,7 @@ esac
 ## cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
 ## make
 ./waf configure -T release $WAF_OPTION
-./waf build
+./waf -p build
 ./waf install --destdir=bin/
 
 
