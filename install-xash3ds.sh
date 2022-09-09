@@ -41,7 +41,7 @@ sudo apt-get install -y --no-install-recommends $PACKAGES
 ## compile xash3ds
 # go to build directory
 cd $XASH3D_BASEDIR
-git clone --recursive https://github.com/FWGS/xash3d
+git clone --recursive https://gitlab.com/tyabus/xash3d
 mkdir -p xash3d/bin/
 cd xash3d/bin/
 ## old if you use deprecated xash3d
