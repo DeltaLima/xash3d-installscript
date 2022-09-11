@@ -9,9 +9,6 @@ metamod_url="https://github.com/mittorn/metamod-p/releases/download/1/metamod.so
 amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.tar.gz"
 jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
 
-XASH_BUILD_DIR=$(pwd)/build
-XASH_INSTALL_DIR=$XASH_BUILD_DIR/result
-
 for xashvar in BUILD_DIR INSTALL_DIR DS_PORT
 do
   xashvarname=XASH_$xashvar
