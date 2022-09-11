@@ -12,11 +12,21 @@ jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_vers
 XASH_BUILD_DIR=$(pwd)/build
 XASH_INSTALL_DIR=$XASH_BUILD_DIR/result
 
+for xashvar in BUILD_DIR INSTALL_DIR DS_PORT
+do
+  xashvarname=XASH_$xashvar
+  
+  if [ -z ${!xashvarname} ]
+  then
+    case ${!xashvarname} in
+      XASH_BUILD_DIR) XASH_BUILD_DIR=$(pwd)/build ;;
+      XASH_INSTALL_DIR) XASH_INSTALL_DIR=$(pwd)/xash3d ;;
+      XASH_DS_PORT) XASH_DS_PORT=27015 ;;
+    esac
+  fi
+  
+done
 
-if [ -z $XASHDS_PORT ]
-then
-  XASHDS_PORT=27015
-fi
 
 showhelp() {
       echo "Usage: ./$0 [server|client] [install|update] [0.19|0.20]"
@@ -235,8 +245,8 @@ then
             ;;
           esac
           echo "#!/bin/bash
-screen -d -m -S xash_${XASH_INSTALL_VERSION}_${XASHDS_PORT} ./xash +ip 0.0.0.0 ${lol} ${XASHDS_PORT} -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg
-echo screenname xash_${XASH_INSTALL_VERSION}_${XASHDS_PORT}" > $XASH_INSTALL_DIR/start.sh
+screen -d -m -S xash_${XASH_INSTALL_VERSION}_${XASH_DS_PORT} ./xash +ip 0.0.0.0 ${lol} ${XASH_DS_PORT} -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg
+echo screenname xash_${XASH_INSTALL_VERSION}_${XASH_DS_PORT}" > $XASH_INSTALL_DIR/start.sh
 
           chmod +x $XASH_INSTALL_DIR/start.sh
           
@@ -251,7 +261,7 @@ ExecStart=${XASH_INSTALL_DIR}/start.sh
 ExecStop=/bin/kill -9 \$MAINPID
 
 [Install]
-WantedBy=multi-user.target" > $XASH_INSTALL_DIR/xashds_${XASH_INSTALL_VERSION}_${XASHDS_PORT}.service
+WantedBy=multi-user.target" > $XASH_INSTALL_DIR/xashds_${XASH_INSTALL_VERSION}_${XASH_DS_PORT}.service
           
           touch $XASH_INSTALL_DIR/valve/listip.cfg
           touch $XASH_INSTALL_DIR/valve/banned.cfg
