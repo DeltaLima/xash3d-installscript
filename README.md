@@ -1,6 +1,6 @@
 # xash3ds-installscript
 
-Origin of this is https://git.la10cy.net/DeltaLima/xash3ds-installscript
+Origin of this is https://git.la10cy.net/DeltaLima/xash3d-installscript
 
 This script install an ready to  play github.com/FGWS/xash3d-fgws automatically under Ubuntu 20.04 and Debian 11 (those i tested so far) by downloading game data from steam directly with the free steamcmd tool from valve.
 Just run the script and play :) 
