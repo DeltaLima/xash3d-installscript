@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# include /etc/os-type for distri specific packages
+. /etc/os-type
+OS=$ID
+OS_VER=$VERSION_ID
+
 ## check if variables for installation are predefined otherwise set defaults
 for xashvar in BUILD_DIR INSTALL_DIR DS_PORT
 do
@@ -115,7 +120,24 @@ XASH_INSTALL_MODE=$2
 
 # client libsdl2-dev:i386 libfreetype6-dev:i386 libfontconfig-dev:i386
 # both g++-multilib git curl build-essential cmake zip xz-utils libstdc++6:i386 lib32gcc1-s1 gnupg2 gcc-multilib ca-certificates
-XASH_APT_PACKAGES="g++-multilib git curl build-essential cmake zip xz-utils libstdc++6:i386 lib32gcc1-s1 gnupg2 gcc-multilib ca-certificates python"
+case $OS in
+  debian)
+    PACKAGES_OSSPECIFIC="lib32gcc1-s1"
+  ;;
+  ubuntu)
+    case $OS_VER in
+      20.04|21.10|22.04)
+        PACKAGES_OSSPECIFIC="lib32gcc-s1"
+      ;;
+      *)
+        PACKAGES_OSSPECIFIC="lib32gcc1-s1"
+      ;;
+      
+    
+  ;;
+esac
+
+XASH_APT_PACKAGES="${PACKAGES_OSSPECIFIC} g++-multilib git curl build-essential cmake zip xz-utils libstdc++6:i386 lib32gcc1-s1 gnupg2 gcc-multilib ca-certificates python"
 case $1 in 
 	"client")
         XASH_APT_PACKAGES+=" libsdl2-dev:i386 libfreetype6-dev:i386 libfontconfig-dev:i386"
