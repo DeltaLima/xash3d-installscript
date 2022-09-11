@@ -311,8 +311,8 @@ quit" > $XASH_BUILD_DIR/steam/hlds.install
       checkerror $?
 	    unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
       checkerror $?
-	    cp -R "hlds_build_$hlds_build/hlds_build_$hlds_build"/* $XASH_INSTALL_DIR
-      checkerror $?
+	    cp -a "hlds_build_$hlds_build/hlds_build_$hlds_build"/* $XASH_INSTALL_DIR
+      message info "checkerror $?"
 	fi
 fi
 
