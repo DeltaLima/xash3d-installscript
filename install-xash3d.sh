@@ -249,9 +249,9 @@ esac
 
 
 ## here we fetch half-life from steam server
-message info "prepare steamcmd for downloading gamedata"
 if [ "$XASH_INSTALL_MODE" == "install" ]
 then
+  message info "prepare steamcmd for downloading gamedata"
 	mkdir -p $XASH_BUILD_DIR/steam
   checkerror $?
 	cd $XASH_BUILD_DIR/steam
