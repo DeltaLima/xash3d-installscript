@@ -122,7 +122,7 @@ XASH_INSTALL_MODE=$2
 # both g++-multilib git curl build-essential cmake zip xz-utils libstdc++6:i386 lib32gcc1-s1 gnupg2 gcc-multilib ca-certificates
 case $OS in
   debian)
-    PACKAGES_OSSPECIFIC="lib32gcc1-s1"
+    PACKAGES_OSSPECIFIC="lib32gcc-s1"
   ;;
   ubuntu)
     case $OS_VER in
@@ -149,8 +149,7 @@ case $1 in
             WAF_OPTIONS="--enable-utils --enable-stb"
           ;;
         esac
-        
-	      
+
 	;;
 	"server")
         case $XASH_INSTALL_VERSION in
