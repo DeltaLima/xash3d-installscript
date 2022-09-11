@@ -8,6 +8,7 @@ hlds_url="https://github.com/DevilBoy-eXe/hlds/releases/download/$hlds_build/hld
 metamod_url="https://github.com/mittorn/metamod-p/releases/download/1/metamod.so"
 amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.tar.gz"
 jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
+XASHDS_PORT=27015
 
 showhelp() {
       echo "Usage: ./$0 [server|client] [install|update] [0.19|0.20]"
@@ -73,7 +74,6 @@ case $1 in
             CMAKE_OPTIONS='-DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"'
           ;;
           0.20)
-            XASHDS_PORT=27015
             PACKAGES="build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip"
             WAF_OPTIONS="-d"
           ;;
@@ -218,7 +218,15 @@ esac
 if [ "$XASH_INSTALL_TYPE" == "server" ] && [ "$XASH_INSTALL_MODE" == "install" ]
 then
       echo "= Creating start.sh script for dedicated server in build/result ="
-      echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
+      case $XASH_INSTALL_VERSION in
+        0.19)
+          echo "./xash +ip 0.0.0.0 +port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
+        ;;
+        0.20)
+          echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
+        ;;
+      esac
+      
       chmod +x $XASH3D_BASEDIR/result/start.sh
       touch $XASH3D_RESULTDIR/valve/listip.cfg
       touch $XASH3D_RESULTDIR/valve/banned.cfg
