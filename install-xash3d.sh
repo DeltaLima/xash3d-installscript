@@ -8,7 +8,11 @@ hlds_url="https://github.com/DevilBoy-eXe/hlds/releases/download/$hlds_build/hld
 metamod_url="https://github.com/mittorn/metamod-p/releases/download/1/metamod.so"
 amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.tar.gz"
 jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
-XASHDS_PORT=27015
+
+if [ -z $XASHDS_PORT ]
+then
+  XASHDS_PORT=27015
+fi
 
 showhelp() {
       echo "Usage: ./$0 [server|client] [install|update] [0.19|0.20]"
@@ -220,10 +224,10 @@ then
       echo "= Creating start.sh script for dedicated server in build/result ="
       case $XASH_INSTALL_VERSION in
         0.19)
-          echo "./xash +ip 0.0.0.0 +port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
+          echo -e "#!/bin/bash\n./xash +ip 0.0.0.0 +port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
         ;;
         0.20)
-          echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
+          echo -e "#!/bin/bash\n./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
         ;;
       esac
       
