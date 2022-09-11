@@ -272,7 +272,7 @@ quit" > $XASH_BUILD_DIR/steam/hlds.install
   checkerror $?
 	## run half-life download from steam server with steamcmd
 	## If grep find Error then fetch the hlds zip from github
-	message info "downloading gamedata with steamcmd from valve"
+	message info "downloading gamedata with steamcmd from valve - this takes a while"
 	if ./steamcmd.sh +runscript hlds.install | grep Error
 	then
 	    message warn "${YELLOW}!!${ENDCOLOR} There was an error fetching Half-Life with steamcmd. Fallback download it from github ${YELLOW}!!${ENDCOLOR}"
