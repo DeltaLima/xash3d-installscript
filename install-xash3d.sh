@@ -1,5 +1,6 @@
 #!/bin/bash
 
+## these variables are from github.com/FWGS/xashds-docker, nice to have :) 
 hlds_build=8684
 amxmod_version=1.8.2
 jk_botti_version=1.43
@@ -9,10 +10,12 @@ metamod_url="https://github.com/mittorn/metamod-p/releases/download/1/metamod.so
 amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.tar.gz"
 jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
 
+## check if variables for installation are predefined otherwise set defaults
 for xashvar in BUILD_DIR INSTALL_DIR DS_PORT
 do
+  # build helpervariable
   xashvarname=XASH_$xashvar
-  
+  # 
   if [ -z ${!xashvarname} ]
   then
     case ${xashvar} in
@@ -26,17 +29,30 @@ done
 
 
 showhelp() {
-      echo "Usage: ./$0 [server|client] [install|update] [0.19|0.20]"
-      echo ""
-      echo "Description: Script to install an Xash3D engine full game client or dedicated server with game data from steamcmd"
-      echo "Server tested on Debian 11 ; Client tested on Ubuntu 20.04"
-      echo "Origin: https://git.la10cy.net/DeltaLima/xash3d-installscript"
-      echo ""
-      echo "Resources we are using:"
-      echo "$steamcmd_url"
-      echo "$hlds_url"
-      echo "0.20: https://github.com/FWGS/xash3d-fwgs"
-      echo "0.19: https://gitlab.com/tyabus/xash3d"
+      echo "Usage: $0 [server|client] [install|update] [0.19|0.20]
+
+Description: Script to install an Xash3D engine full game client or dedicated server with game data from steamcmd
+Server tested on Debian 11 ; Client tested on Ubuntu 20.04
+Origin: https://git.la10cy.net/DeltaLima/xash3d-installscript
+
+You can override following variables default values:
+XASH_INSTALL_DIR, XASH_DS_PORT and XASH_BUILD_DIR
+
+Example:
+
+1) Install server version '0.19' into '~/opt/xashds_oldengine'
+
+  XASH_INSTALL_DIR=~/opt/xashds_old $0 server install 0.19
+
+2) Update client version 0.20 located in ~/Games/Xash3D where the build directory is as well
+  
+  XASH_INSTALL_DIR=~/Games/Xash3D XASH_BUILD_DIR=\$XASH_INSTALL_DIR/build $0 client update 0.20
+
+Resources we are using:
+$steamcmd_url
+$hlds_url
+0.20: https://github.com/FWGS/xash3d-fwgs
+0.19: https://gitlab.com/tyabus/xash3d"
       exit 1
 }
 
@@ -117,13 +133,22 @@ fi
 
 echo "= Compiling xash3d-fwgs ="
 ## compile xash3ds
-# go to build directory
+# prepare and configure for compiling
 cd $XASH_BUILD_DIR
 case $XASH_INSTALL_MODE in
 	"install")
-		git clone --recursive $XASH_GIT_URL
-		mkdir -p ${XASH_GIT_DIR}/bin/
-		cd ${XASH_GIT_DIR}/bin
+    case $XASH_INSTALL_VERSION in
+      0.19)
+        git clone --recursive $XASH_GIT_URL
+        mkdir -p ${XASH_GIT_DIR}/bin/
+        cd ${XASH_GIT_DIR}/bin
+      ;;
+      0.20)
+        mkdir -p ${XASH_GIT_DIR}/bin/
+        cd ${XASH_GIT_DIR}
+      ;;
+    esac
+		
 		;;
 	"update")
 		cd ${XASH_GIT_DIR}
@@ -150,14 +175,8 @@ case $XASH_INSTALL_MODE in
 		;;
 esac
 
-##   oldstuff  ##
-## old if you use deprecated xash3d 0.19.3
-## cmake -DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" ../
-## make
-##   oldstuff  ##
-
 ## build 
-
+## 
 case $XASH_INSTALL_VERSION in
   0.19)
     cmake $CMAKE_OPTIONS ../
