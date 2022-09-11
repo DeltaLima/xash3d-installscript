@@ -113,9 +113,12 @@ case $2 in
 esac
 XASH_INSTALL_MODE=$2
 
+# client libsdl2-dev:i386 libfreetype6-dev:i386 libfontconfig-dev:i386
+# both g++-multilib git curl build-essential cmake zip xz-utils libstdc++6:i386 lib32gcc1-s1 gnupg2 gcc-multilib ca-certificates
+XASH_APT_PACKAGES="g++-multilib git curl build-essential cmake zip xz-utils libstdc++6:i386 lib32gcc1-s1 gnupg2 gcc-multilib ca-certificates python"
 case $1 in 
 	"client")
-        XASH_APT_PACKAGES="git curl build-essential gcc-multilib g++-multilib python python2 libsdl2-dev:i386 libfontconfig-dev:i386 libfreetype6-dev:i386"
+        XASH_APT_PACKAGES+=" libsdl2-dev:i386 libfreetype6-dev:i386 libfontconfig-dev:i386"
         case $XASH_INSTALL_VERSION in
           0.19)
             CMAKE_OPTIONS='-DXASH_DOWNLOAD_DEPENDENCIES=yes -DXASH_STATIC=ON-DXASH_DLL_LOADER=ON -DXASH_VGUI=ON -DMAINUI_USE_STB=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"'
@@ -129,7 +132,6 @@ case $1 in
 	      
 	;;
 	"server")
-        XASH_APT_PACKAGES="build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip"
         case $XASH_INSTALL_VERSION in
           0.19)
             CMAKE_OPTIONS='-DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"'
