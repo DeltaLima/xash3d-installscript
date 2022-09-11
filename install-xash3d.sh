@@ -9,6 +9,10 @@ metamod_url="https://github.com/mittorn/metamod-p/releases/download/1/metamod.so
 amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.tar.gz"
 jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
 
+XASH_BUILD_DIR=$(pwd)/build
+XASH_INSTALL_DIR=$XASH_BUILD_DIR/result
+
+
 if [ -z $XASHDS_PORT ]
 then
   XASHDS_PORT=27015
@@ -92,10 +96,8 @@ XASH_INSTALL_TYPE=$1
 export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 
 echo "= Creating directories ="
-XASH3D_BASEDIR=$(pwd)/build
 XASH_GIT_DIR="$(echo ${XASH_GIT_URL} | cut -d / -f5)"
-XASH3D_RESULTDIR=$XASH3D_BASEDIR/result
-test -d $XASH3D_RESULTDIR || mkdir -p $XASH3D_RESULTDIR
+test -d $XASH_INSTALL_DIR || mkdir -p $XASH_INSTALL_DIR
 
 if [ "$XASH_INSTALL_MODE" == "install" ]
 then
@@ -108,7 +110,7 @@ fi
 echo "= Compiling xash3d-fwgs ="
 ## compile xash3ds
 # go to build directory
-cd $XASH3D_BASEDIR
+cd $XASH_BUILD_DIR
 case $XASH_INSTALL_MODE in
 	"install")
 		git clone --recursive $XASH_GIT_URL
@@ -166,17 +168,17 @@ esac
 ## here we fetch half-life from steam server
 if [ "$XASH_INSTALL_MODE" == "install" ]
 then
-	mkdir -p $XASH3D_BASEDIR/steam
-	cd $XASH3D_BASEDIR/steam
+	mkdir -p $XASH_BUILD_DIR/steam
+	cd $XASH_BUILD_DIR/steam
 	## an steamcmd automation
 	echo "login anonymous
-force_install_dir $XASH3D_BASEDIR/result
+force_install_dir $XASH_INSTALL_DIR
 app_set_config 90 mod valve
 app_update 90
 app_update 90
 app_update 90 validate
 app_update 90 validate
-quit" > $XASH3D_BASEDIR/steam/hlds.install
+quit" > $XASH_BUILD_DIR/steam/hlds.install
 
 	echo "= fetching hlds with steamcmd ="
 	## fetch steamcmd
@@ -191,28 +193,28 @@ quit" > $XASH3D_BASEDIR/steam/hlds.install
 	    ## this is just another source you can use instead of steamcmd. 
 	    curl -LJO "$hlds_url" 
 	    unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
-	    cp -R "hlds_build_$hlds_build/hlds_build_$hlds_build"/* $XASH3D_RESULTDIR
+	    cp -R "hlds_build_$hlds_build/hlds_build_$hlds_build"/* $XASH_INSTALL_DIR
 	fi
 fi
 
 ## copy xash3d binaries to result
 ## place Xash3D binaries in result and overwrite all
-echo "= copy xash3d binaries to build/result"
+echo "= copy xash3d binaries to $XASH_INSTALL_DIR"
 
 case $XASH_INSTALL_VERSION in
   0.19)
-    cd $XASH3D_BASEDIR/$XASH_GIT_DIR/bin
+    cd $XASH_BUILD_DIR/$XASH_GIT_DIR/bin
     case $XASH_INSTALL_TYPE in
       server)
-        cp -R engine/xash3d $XASH3D_RESULTDIR/xash
+        cp -R engine/xash3d $XASH_INSTALL_DIR/xash
       ;;
       client)
-        cp -R engine/xash3d mainui/libxashmenu.so vgui_support/libvgui_support.so vgui_support/vgui.so $XASH3D_RESULTDIR
+        cp -R engine/xash3d mainui/libxashmenu.so vgui_support/libvgui_support.so vgui_support/vgui.so $XASH_INSTALL_DIR
       ;;
     esac
   ;;
   0.20)
-    cp -R $XASH3D_BASEDIR/$XASH_GIT_DIR/bin/* $XASH3D_RESULTDIR
+    cp -R $XASH_BUILD_DIR/$XASH_GIT_DIR/bin/* $XASH_INSTALL_DIR
   ;;
 esac
 
@@ -223,7 +225,7 @@ if [ "$XASH_INSTALL_MODE" == "install" ]
 then
       case $XASH_INSTALL_TYPE in
         server)
-          echo "= Creating start.sh script for dedicated server in build/result ="
+          echo "= Creating start.sh script for dedicated server in $XASH_INSTALL_DIR ="
           case $XASH_INSTALL_VERSION in
             0.19)
               lol="+port"
@@ -234,25 +236,25 @@ then
           esac
           echo "#!/bin/bash
 screen -d -m -S xash_${XASH_INSTALL_VERSION}_${XASHDS_PORT} ./xash +ip 0.0.0.0 ${lol} ${XASHDS_PORT} -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg
-echo screenname xash_${XASH_INSTALL_VERSION}_${XASHDS_PORT}" > $XASH3D_RESULTDIR/start.sh
+echo screenname xash_${XASH_INSTALL_VERSION}_${XASHDS_PORT}" > $XASH_INSTALL_DIR/start.sh
 
-          chmod +x $XASH3D_BASEDIR/result/start.sh
+          chmod +x $XASH_INSTALL_DIR/start.sh
           
           echo "After=network.target
 
 [Service]
 User=$(whoami)
-WorkingDirectory=${XASH3D_RESULTDIR}
+WorkingDirectory=${XASH_INSTALL_DIR}
 Type=oneshot
 #StandardOutput=journal
-ExecStart=${XASH3D_RESULTDIR}/start.sh
+ExecStart=${XASH_INSTALL_DIR}/start.sh
 ExecStop=/bin/kill -9 \$MAINPID
 
 [Install]
-WantedBy=multi-user.target" > $XASH3D_RESULTDIR/xashds_${XASH_INSTALL_VERSION}_${XASHDS_PORT}.service
+WantedBy=multi-user.target" > $XASH_INSTALL_DIR/xashds_${XASH_INSTALL_VERSION}_${XASHDS_PORT}.service
           
-          touch $XASH3D_RESULTDIR/valve/listip.cfg
-          touch $XASH3D_RESULTDIR/valve/banned.cfg
+          touch $XASH_INSTALL_DIR/valve/listip.cfg
+          touch $XASH_INSTALL_DIR/valve/banned.cfg
           echo "= If you need an example config for a public server, have a look into https://github.com/FWGS/xashds-docker/tree/master/valve ="
         ;;
         
@@ -261,15 +263,15 @@ WantedBy=multi-user.target" > $XASH3D_RESULTDIR/xashds_${XASH_INSTALL_VERSION}_$
 Name=Xash3d ${XASH_INSTALL_VERSION}
 GenericName=Half-Life
 Comment=OpenSource Half-Life Engine v${XASH_INSTALL_VERSION}
-Exec=${XASH3D_RESULTDIR}/xash3d
+Exec=${XASH_INSTALL_DIR}/xash3d
 Terminal=false
 Type=Application
 StartupNotify=false
 Categories=Game;
-X-Desktop-File-Install-Version=0.24" > $XASH3D_RESULTDIR/Xash3D_${XASH_INSTALL_VERSION}.desktop
+X-Desktop-File-Install-Version=0.24" > $XASH_INSTALL_DIR/Xash3D_${XASH_INSTALL_VERSION}.desktop
         ;;
       esac
 fi
 
-echo "= DONE! If everything went well an no errors occured you can just run your game/server from $XASH3D_BASEDIR/result/ ="
+echo "= DONE! If everything went well an no errors occured you can just run your game/server from $XASH_INSTALL_DIR ="
 echo "= starting server: ./start.sh ; starting game client ./xash3d ="
