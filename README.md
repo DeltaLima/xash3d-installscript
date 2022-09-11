@@ -6,7 +6,7 @@ This script install an ready to  play github.com/FGWS/xash3d-fgws automatically 
 Just run the script and play :) 
 
 ```
-Usage: ./Dokumente/git/xash3d-installscript/install-xash3d.sh [server|client] [install|update] [0.19|0.20]
+Usage: ./install-xash3d.sh [server|client] [install|update] [0.19|0.20]
 
 Description: Script to install an Xash3D-FWGS client or Xash3D dedicated server with game data from steamcmd
 Server tested on Debian 11 ; Client tested on Ubuntu 20.04
