@@ -316,6 +316,11 @@ case $XASH_INSTALL_VERSION in
   ;;
 esac
 
+# copy icon for desktop file to install dir
+if [ "$XASH_INSTALL_TYPE" == "client" ] && [ "$XASH_INSTALL_MODE" == "install" ]
+then
+  cp ${XASH_BUILD_DIR}/${XASH_GIT_DIR}/game_launch/icon-xash-material.ico ${XASH_INSTALL_DIR}
+fi
 
 
 # it seems that the build actually (21.08.2022) is buggy and does not exec server.cfg by its own
@@ -346,7 +351,7 @@ echo screenname xash_${XASH_INSTALL_VERSION}_${XASH_DS_PORT}" > $XASH_INSTALL_DI
 [Service]
 User=$(whoami)
 WorkingDirectory=${XASH_INSTALL_DIR}
-Type=oneshot
+#Type=oneshot
 #StandardOutput=journal
 ExecStart=${XASH_INSTALL_DIR}/start.sh
 ExecStop=/bin/kill -9 \$MAINPID
@@ -362,15 +367,17 @@ WantedBy=multi-user.target" > $XASH_INSTALL_DIR/xashds_${XASH_INSTALL_VERSION}_$
         
         client)
           echo "[Desktop Entry]
-Name=Xash3d ${XASH_INSTALL_VERSION}
+Name=Xash3D ${XASH_INSTALL_VERSION}
 GenericName=Half-Life
-Comment=OpenSource Half-Life Engine v${XASH_INSTALL_VERSION}
-Exec=${XASH_INSTALL_DIR}/xash3d
+Comment=OpenSource Half-Life Engine
+Exec=${XASH_INSTALL_VERSION}/xash3d
+Icon=${XASH_INSTALL_VERSION}/icon-xash-material.ico
 Terminal=false
 Type=Application
 StartupNotify=false
 Categories=Game;
-X-Desktop-File-Install-Version=0.24" > $XASH_INSTALL_DIR/Xash3D_${XASH_INSTALL_VERSION}.desktop
+X-Desktop-File-Install-Version=0.24
+" > $XASH_INSTALL_DIR/Xash3D_$(echo ${XASH_INSTALL_VERSION} | sed 's/\.//').desktop
           checkerror $?
         ;;
       esac
