@@ -10,7 +10,7 @@ amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.ta
 jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
 
 showhelp() {
-      echo "Usage: ./$0 [server|client] [install|update]"
+      echo "Usage: ./$0 [server|client] [install|update] [0.19|0.20]"
       echo ""
       echo "Description: Script to install an Xash3D-FWGS client or Xash3D dedicated server with game data from steamcmd"
       echo "Server tested on Debian 11 ; Client tested on Ubuntu 20.04"
@@ -19,28 +19,25 @@ showhelp() {
       echo "Resources we are using:"
       echo $steamcmd_url
       echo $hlds_url
-      echo https://github.com/FWGS/xash3d-fwgs
+      echo "0.20: https://github.com/FWGS/xash3d-fwgs"
+      echo "0.19: https://gitlab.com/tyabus/xash3d"
       exit 1
 }
 
-case $1 in 
-	"client")
-	      CLIENT=true
-	      PACKAGES="git curl build-essential gcc-multilib g++-multilib python python2 libsdl2-dev:i386 libfontconfig-dev:i386 libfreetype6-dev:i386"
-	      WAF_OPTION="--enable-utils --enable-stb"
-	      export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
+case $3 in 
+	"0.19")
+        XASH_GIT_URL="https://gitlab.com/tyabus/xash3d"
 	;;
-	"server")
-	CLIENT=false
-	      XASHDS_PORT=27015
-	      CLIENT=false
-	      PACKAGES="build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip"
-	      WAF_OPTION="-d"
+        
+	"0.20")
+        XASH_GIT_URL="https://github.com/FWGS/xash3d-fwgs"
 	;;
+  
 	*)
-	showhelp
+		showhelp
 	;;
 esac
+XASH_INSTALL_VERSION=$3
 
 case $2 in 
 	"update")
@@ -53,13 +50,50 @@ case $2 in
 		showhelp
 	;;
 esac
+XASH_INSTALL_MODE=$2
+
+case $1 in 
+	"client")
+        case $XASH_INSTALL_VERSION in
+          0.19)
+            CMAKE_OPTIONS='-DXASH_DOWNLOAD_DEPENDENCIES=yes -DXASH_STATIC=ON-DXASH_DLL_LOADER=ON -DXASH_VGUI=ON -DMAINUI_USE_STB=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"'
+          ;;
+          
+          0.20)
+            PACKAGES="git curl build-essential gcc-multilib g++-multilib python python2 libsdl2-dev:i386 libfontconfig-dev:i386 libfreetype6-dev:i386"
+            WAF_OPTIONS="--enable-utils --enable-stb"
+          ;;
+        esac
+        
+	      
+	;;
+	"server")
+        case $XASH_INSTALL_VERSION in
+          0.19)
+            CMAKE_OPTIONS='-DXASH_DEDICATED=ON -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"'
+          ;;
+          0.20)
+            XASHDS_PORT=27015
+            PACKAGES="build-essential  ca-certificates  cmake  curl  git  gnupg2 g++-multilib lib32gcc1-s1 libstdc++6:i386 python unzip xz-utils zip"
+            WAF_OPTIONS="-d"
+          ;;
+        esac
+	;;
+	*)
+	showhelp
+	;;
+esac
+XASH_INSTALL_TYPE=$1
+
+export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 
 echo "= Creating directories ="
 XASH3D_BASEDIR=$(pwd)/build
+XASH_GIT_DIR="$(echo ${XASH_GIT_URL} | cut -d / -f5)"
 XASH3D_RESULTDIR=$XASH3D_BASEDIR/result
 test -d $XASH3D_RESULTDIR || mkdir -p $XASH3D_RESULTDIR
 
-if [ "$2" == "install" ]
+if [ "$XASH_INSTALL_MODE" == "install" ]
 then
 	echo "= Performing apt install ="
 	sudo dpkg --add-architecture i386
@@ -71,17 +105,31 @@ echo "= Compiling xash3d-fwgs ="
 ## compile xash3ds
 # go to build directory
 cd $XASH3D_BASEDIR
-case $2 in
+case $XASH_INSTALL_MODE in
 	"install")
-		git clone --recursive https://github.com/FWGS/xash3d-fwgs
-		mkdir -p xash3d-fwgs/bin/
-		cd xash3d-fwgs
+		git clone --recursive $XASH_GIT_URL
+		mkdir -p ${XASH_GIT_DIR}/bin/
+		cd ${XASH_GIT_DIR}/bin
 		;;
 	"update")
-		cd xash3d-fwgs
-		./waf clean
-		rm bin/*
-		git pull
+		cd ${XASH_GIT_DIR}
+    case $XASH_INSTALL_VERSION in
+      0.19)
+        cd bin
+        cmake --cmake-clean-cache ../
+        cd ../
+        rm -Rf bin/*
+        git pull
+        cd bin        
+      ;;
+      0.20)
+        ./waf clean
+        rm bin/*
+        git pull
+      ;;
+    esac
+    
+
 		;;
 	*)
 		exit 1
@@ -95,13 +143,24 @@ esac
 ##   oldstuff  ##
 
 ## build 
-./waf configure -T release $WAF_OPTION
-./waf -p build
-./waf install --destdir=bin/
+
+case $XASH_INSTALL_VERSION in
+  0.19)
+    cmake $CMAKE_OPTIONS ../
+    make -j2 #VERBOSE=1
+    
+  ;;
+  0.20)
+    ./waf configure -T release $WAF_OPTIONS
+    ./waf -p build
+    ./waf install --destdir=bin/
+  ;;
+esac
+
 
 
 ## here we fetch half-life from steam server
-if [ "$2" == "install" ]
+if [ "$XASH_INSTALL_MODE" == "install" ]
 then
 	mkdir -p $XASH3D_BASEDIR/steam
 	cd $XASH3D_BASEDIR/steam
@@ -135,11 +194,28 @@ fi
 ## copy xash3d binaries to result
 ## place Xash3D binaries in result and overwrite all
 echo "= copy xash3d binaries to build/result"
-cp -R $XASH3D_BASEDIR/xash3d-fwgs/bin/* $XASH3D_RESULTDIR
+
+case $XASH_INSTALL_VERSION in
+  0.19)
+    cd $XASH3D_BASEDIR/$XASH_GIT_DIR/bin
+    case $XASH_INSTALL_TYPE in
+      server)
+        cp -R engine/xash3d $XASH3D_RESULTDIR/xash
+      ;;
+      client)
+        cp -R engine/xash3d mainui/libxashmenu.so vgui_support/libvgui_support.so vgui_support/vgui.so $XASH3D_RESULTDIR
+      ;;
+    esac
+  ;;
+  0.20)
+    cp -R $XASH3D_BASEDIR/$XASH_GIT_DIR/bin/* $XASH3D_RESULTDIR
+  ;;
+esac
+
 
 
 # it seems that the build actually (21.08.2022) is buggy and does not exec server.cfg by its own
-if [ "$1" == "server" ] && [ "$2" == "install" ]
+if [ "$XASH_INSTALL_TYPE" == "server" ] && [ "$XASH_INSTALL_MODE" == "install" ]
 then
       echo "= Creating start.sh script for dedicated server in build/result ="
       echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
