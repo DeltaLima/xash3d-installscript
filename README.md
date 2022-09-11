@@ -6,26 +6,27 @@ This script install an ready to  play github.com/FGWS/xash3d-fgws automatically 
 Just run the script and play :) 
 
 ```
-Usage: ./install-xash3ds.sh [server|client] [install|update]
+Usage: ./Dokumente/git/xash3d-installscript/install-xash3d.sh [server|client] [install|update] [0.19|0.20]
 
-Description: Script to install an Xash3D-FWGS client or Xash3D dedicated server with game data from steamcmd.
+Description: Script to install an Xash3D-FWGS client or Xash3D dedicated server with game data from steamcmd
 Server tested on Debian 11 ; Client tested on Ubuntu 20.04
 Origin: https://git.la10cy.net/DeltaLima/xash3ds-installscript
 
 Resources we are using:
 https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
 https://github.com/DevilBoy-eXe/hlds/releases/download/8684/hlds_build_8684.zip
-https://github.com/FWGS/xash3d-fwgs
+0.20: https://github.com/FWGS/xash3d-fwgs
+0.19: https://gitlab.com/tyabus/xash3d
 ```
 
-To install the server run following command in the directory where you checked this git into
+To install the server in version 0.20 run following command in the directory where you checked this git into
 ```
-bash install-xash3ds.sh server install
+bash install-xash3ds.sh server install 0.20
 ```
 
 To install the FULL PLAYABLE client with all game data (steamcmd thx <3) run this
 ```
-bash install-xash3ds.sh client install
+bash install-xash3ds.sh client install 0.20
 ```
 
 Your server or gamefiles (you can run server first and then rerun afterwards with client to get the full package) are in
@@ -50,4 +51,4 @@ bash install-xash3ds.sh client update
 
 Have a look on my servers at https://HL.LA10CY.NET :) Happy fragging!
 
-This script is based on the work of https://github.com/FWGS/xashds-docker/ and https://github.com/FGWS/xash3d-fgws
+This script is based on the work of https://github.com/FWGS/xashds-docker/ and https://github.com/FGWS/xash3d-fgws and https://gitlab.com/tyabus/xash3d
