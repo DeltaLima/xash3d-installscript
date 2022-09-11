@@ -127,7 +127,7 @@ case $OS in
   ubuntu)
     case $OS_VER in
       20.04|21.10|22.04)
-        PACKAGES_OSSPECIFIC="lib32gcc-s1"
+        PACKAGES_OSSPECIFIC="lib32gcc1"
       ;;
       *)
         PACKAGES_OSSPECIFIC="lib32gcc1-s1"
