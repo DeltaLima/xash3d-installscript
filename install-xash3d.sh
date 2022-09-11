@@ -15,10 +15,10 @@ do
   
   if [ -z ${!xashvarname} ]
   then
-    case ${!xashvarname} in
-      XASH_BUILD_DIR) XASH_BUILD_DIR=$(pwd)/build ;;
-      XASH_INSTALL_DIR) XASH_INSTALL_DIR=$(pwd)/xash3d ;;
-      XASH_DS_PORT) XASH_DS_PORT=27015 ;;
+    case ${!xashvar} in
+      BUILD_DIR) XASH_BUILD_DIR=$(pwd)/build ;;
+      INSTALL_DIR) XASH_INSTALL_DIR=$(pwd)/xash3d ;;
+      DS_PORT) XASH_DS_PORT=27015 ;;
     esac
   fi
   
