@@ -373,12 +373,12 @@ fi
 
 
 
-case $XASH_INSTALLATION_MODE in
+case $XASH_INSTALL_MODE in
   install)
     message info "${GREEN}DONE!!${ENDCOLOR} Installation completed without erros."
     message info "Your ready to run Xash3D installation is located in"
     message info "${YELLOW}${XASH_INSTALL_DIR}${ENDCOLOR}"
-    case $XASH_INSTALLATION_TYPE in
+    case $XASH_INSTALL_TYPE in
       client)
         message info "You can run the game with ${YELLOW}'./xash3d'${ENDCOLOR} from the install location"
       ;;
