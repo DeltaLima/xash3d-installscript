@@ -219,22 +219,39 @@ esac
 
 
 # it seems that the build actually (21.08.2022) is buggy and does not exec server.cfg by its own
-if [ "$XASH_INSTALL_TYPE" == "server" ] && [ "$XASH_INSTALL_MODE" == "install" ]
+if [ "$XASH_INSTALL_MODE" == "install" ]
 then
-      echo "= Creating start.sh script for dedicated server in build/result ="
-      case $XASH_INSTALL_VERSION in
-        0.19)
-          echo -e "#!/bin/bash\n./xash +ip 0.0.0.0 +port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
+      case $XASH_INSTALL_TYPE in
+        server)
+          echo "= Creating start.sh script for dedicated server in build/result ="
+          case $XASH_INSTALL_VERSION in
+            0.19)
+              echo -e "#!/bin/bash\n./xash +ip 0.0.0.0 +port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_RESULTDIR/start.sh
+            ;;
+            0.20)
+              echo -e "#!/bin/bash\n./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_RESULTDIR/start.sh
+            ;;
+          esac
+          
+          chmod +x $XASH3D_BASEDIR/result/start.sh
+          touch $XASH3D_RESULTDIR/valve/listip.cfg
+          touch $XASH3D_RESULTDIR/valve/banned.cfg
+          echo "= If you need an example config for a public server, have a look into https://github.com/FWGS/xashds-docker/tree/master/valve ="
         ;;
-        0.20)
-          echo -e "#!/bin/bash\n./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
+        
+        client)
+          echo "[Desktop Entry]
+Name=Xash3d ${XASH_INSTALL_VERSION}
+GenericName=Half-Life
+Comment=OpenSource Half-Life Engine v${XASH_INSTALL_VERSION}
+Exec=${XASH3D_RESULTDIR}/xash3d
+Terminal=false
+Type=Application
+StartupNotify=false
+Categories=Game;
+X-Desktop-File-Install-Version=0.24" > $XASH3D_RESULTDIR/Xash3D_${XASH_INSTALL_VERSION}.desktop
         ;;
       esac
-      
-      chmod +x $XASH3D_BASEDIR/result/start.sh
-      touch $XASH3D_RESULTDIR/valve/listip.cfg
-      touch $XASH3D_RESULTDIR/valve/banned.cfg
-      echo "= If you need an example config for a public server, have a look into https://github.com/FWGS/xashds-docker/tree/master/valve ="
 fi
 
 echo "= DONE! If everything went well an no errors occured you can just run your game/server from $XASH3D_BASEDIR/result/ ="
