@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # include /etc/os-type for distri specific packages
-. /etc/os-type
+. /etc/os-release
 OS=$ID
 OS_VER=$VERSION_ID
 
