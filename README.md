@@ -21,12 +21,12 @@ https://github.com/DevilBoy-eXe/hlds/releases/download/8684/hlds_build_8684.zip
 
 To install the server run following command in the directory where you checked this git into
 ```
-bash install-xash3ds.sh server install [Version]
+./install-xash3ds.sh server install [Version]
 ```
 
 To install the FULL PLAYABLE client with all game data (steamcmd thx <3) run this
 ```
-bash install-xash3ds.sh client install [Version]
+./install-xash3ds.sh client install [Version]
 ```
 
 Your server or gamefiles (you can run server first and then rerun afterwards with client to get the full package) are in
@@ -46,7 +46,7 @@ or the game to have a frag
 
 You can easly update both, client and server (example client):
 ```
-bash install-xash3d.sh client update [Version]
+./install-xash3d.sh client update [Version]
 ```
 
 Have a look on my servers at https://HL.LA10CY.NET :) Happy fragging!
