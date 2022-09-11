@@ -1,15 +1,5 @@
 #!/bin/bash
 
-## these variables are from github.com/FWGS/xashds-docker, nice to have :) 
-hlds_build=8684
-amxmod_version=1.8.2
-jk_botti_version=1.43
-steamcmd_url="https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz"
-hlds_url="https://github.com/DevilBoy-eXe/hlds/releases/download/$hlds_build/hlds_build_$hlds_build.zip"
-metamod_url="https://github.com/mittorn/metamod-p/releases/download/1/metamod.so"
-amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.tar.gz"
-jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
-
 ## check if variables for installation are predefined otherwise set defaults
 for xashvar in BUILD_DIR INSTALL_DIR DS_PORT
 do
@@ -27,6 +17,21 @@ do
   
 done
 
+## these variables are from github.com/FWGS/xashds-docker, nice to have :) 
+hlds_build=8684
+amxmod_version=1.8.2
+jk_botti_version=1.43
+steamcmd_url="https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz"
+hlds_url="https://github.com/DevilBoy-eXe/hlds/releases/download/$hlds_build/hlds_build_$hlds_build.zip"
+metamod_url="https://github.com/mittorn/metamod-p/releases/download/1/metamod.so"
+amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.tar.gz"
+jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
+
+# colors for colored output 8)
+RED="\e[31m"
+GREEN="\e[32m"
+YELLOW="\e[33m"
+ENDCOLOR="\e[0m"
 
 showhelp() {
       echo "Usage: $0 [server|client] [install|update] [0.19|0.20]
@@ -54,6 +59,30 @@ $hlds_url
 0.20: https://github.com/FWGS/xash3d-fwgs
 0.19: https://gitlab.com/tyabus/xash3d"
       exit 1
+}
+
+function message() {
+     case $1 in 
+     info)
+       MESSAGE_TYPE="${GREEN}INFO${ENDCOLOR}"
+     ;;
+     warn)
+       MESSAGE_TYPE="${YELLOW}WARN${ENDCOLOR}"
+     ;;
+     error)
+       MESSAGE_TYPE="${RED}ERROR${ENDCOLOR}"
+     ;;
+     esac
+     echo -e "[${MESSAGE_TYPE}] $2"
+}
+
+function checkerror() {
+     if [ $1 -gt 0 ]
+     then
+          message error "Something went wrong, got wrong exit code ${RED}ERROR${ENDCOLOR}"
+          message error "Exit here."
+          exit 1
+     fi
 }
 
 case $3 in 
@@ -118,33 +147,43 @@ XASH_INSTALL_TYPE=$1
 
 export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 
-echo "= Creating directories ="
+message info "Creating directories"
 XASH_GIT_DIR="$(echo ${XASH_GIT_URL} | cut -d / -f5)"
-test -d $XASH_INSTALL_DIR || mkdir -p $XASH_INSTALL_DIR
-test -d $XASH_BUILD_DIR || mkdir -p $XASH_BUILD_DIR
+if [ ! -d $XASH_INSTALL_DIR ]
+then
+  mkdir -p $XASH_INSTALL_DIR && message info "created ${YELLOW}${XASH_INSTALL_DIR}${ENDCOLOR}"
+  checkerror $?
+fi
+
+if [ ! -d $XASH_BUILD_DIR ]
+then
+  mkdir -p $XASH_BUILD_DIR && message info "created ${YELLOW}${XASH_BUILD_DIR}${ENDCOLOR}"
+  checkerror $?
+fi
 
 if [ "$XASH_INSTALL_MODE" == "install" ]
 then
-	echo "= Performing apt install ="
+	message info "Performing apt install"
 	sudo dpkg --add-architecture i386
 	sudo apt update
 	sudo apt-get install -y --no-install-recommends $PACKAGES
 fi
 
-echo "= Compiling xash3d-fwgs ="
+message info "Prepare ${YELLOW}${XASH_GIT_DIR}${ENDCOLOR}"
 ## compile xash3ds
 # prepare and configure for compiling
 cd $XASH_BUILD_DIR
 case $XASH_INSTALL_MODE in
 	"install")
+    git clone --recursive $XASH_GIT_URL
+    checkerror $?
+    test -d ${XASH_GIT_DIR} || mkdir -p ${XASH_GIT_DIR}/bin/
+    checkerror $?
     case $XASH_INSTALL_VERSION in
       0.19)
-        git clone --recursive $XASH_GIT_URL
-        mkdir -p ${XASH_GIT_DIR}/bin/
         cd ${XASH_GIT_DIR}/bin
       ;;
       0.20)
-        mkdir -p ${XASH_GIT_DIR}/bin/
         cd ${XASH_GIT_DIR}
       ;;
     esac
@@ -156,15 +195,28 @@ case $XASH_INSTALL_MODE in
       0.19)
         cd bin
         cmake --cmake-clean-cache ../
+        checkerror $?
         cd ../
-        rm -Rf bin/*
+        if [ "$(ls -A bin)" ]
+        then
+          rm -Rf bin/*
+          checkerror $?
+        fi
         git pull
+        checkerror $?
         cd bin        
       ;;
       0.20)
         ./waf clean
-        rm bin/*
+        checkerror $?
+        if [ "$(ls -A bin)" ]
+        then
+          rm -Rf bin/*
+          checkerror $?
+        fi
+        checkerror $?
         git pull
+        checkerror $?
       ;;
     esac
     
@@ -176,26 +228,32 @@ case $XASH_INSTALL_MODE in
 esac
 
 ## build 
-## 
+message info "Compiling ${YELLOW}${XASH_GIT_DIR}${ENDCOLOR}"
 case $XASH_INSTALL_VERSION in
   0.19)
     cmake $CMAKE_OPTIONS ../
+    checkerror $?
     make -j2 #VERBOSE=1
-    
+    checkerror $?    
   ;;
   0.20)
     ./waf configure -T release $WAF_OPTIONS
+    checkerror $?
     ./waf -p build
+    checkerror $?
     ./waf install --destdir=bin/
+    checkerror $?
   ;;
 esac
 
 
 
 ## here we fetch half-life from steam server
+message info "prepare steamcmd for downloading gamedata"
 if [ "$XASH_INSTALL_MODE" == "install" ]
 then
 	mkdir -p $XASH_BUILD_DIR/steam
+  checkerror $?
 	cd $XASH_BUILD_DIR/steam
 	## an steamcmd automation
 	echo "login anonymous
@@ -206,27 +264,32 @@ app_update 90
 app_update 90 validate
 app_update 90 validate
 quit" > $XASH_BUILD_DIR/steam/hlds.install
+  checkerror $?
 
-	echo "= fetching hlds with steamcmd ="
 	## fetch steamcmd
+  message info "getting steamcmd binary"
 	curl -L "$steamcmd_url" | tar xzvf - 
+  checkerror $?
 	## run half-life download from steam server with steamcmd
 	## If grep find Error then fetch the hlds zip from github
-	echo "= This can take a while depending ony your connection ="
+	message info "downloading gamedata with steamcmd from valve"
 	if ./steamcmd.sh +runscript hlds.install | grep Error
 	then
-	    echo "= !! There was an error fetching hlds with steamcmd. Fetching it from github !! ="
-	    echo $hlds_url
+	    message warn "${YELLOW}!!${ENDCOLOR} There was an error fetching Half-Life with steamcmd. Fallback download it from github ${YELLOW}!!${ENDCOLOR}"
+	    message info "$hlds_url"
 	    ## this is just another source you can use instead of steamcmd. 
 	    curl -LJO "$hlds_url" 
+      checkerror $?
 	    unzip "hlds_build_$hlds_build.zip" -d "hlds_build_$hlds_build" 
+      checkerror $?
 	    cp -R "hlds_build_$hlds_build/hlds_build_$hlds_build"/* $XASH_INSTALL_DIR
+      checkerror $?
 	fi
 fi
 
 ## copy xash3d binaries to result
 ## place Xash3D binaries in result and overwrite all
-echo "= copy xash3d binaries to $XASH_INSTALL_DIR"
+message info "copy xash3d binaries to ${YELLOW}${XASH_INSTALL_DIR}${ENDCOLOR}"
 
 case $XASH_INSTALL_VERSION in
   0.19)
@@ -234,14 +297,17 @@ case $XASH_INSTALL_VERSION in
     case $XASH_INSTALL_TYPE in
       server)
         cp -R engine/xash3d $XASH_INSTALL_DIR/xash
+        checkerror $?
       ;;
       client)
         cp -R engine/xash3d mainui/libxashmenu.so vgui_support/libvgui_support.so vgui_support/vgui.so $XASH_INSTALL_DIR
+        checkerror $?
       ;;
     esac
   ;;
   0.20)
     cp -R $XASH_BUILD_DIR/$XASH_GIT_DIR/bin/* $XASH_INSTALL_DIR
+    checkerror $?
   ;;
 esac
 
@@ -252,7 +318,8 @@ if [ "$XASH_INSTALL_MODE" == "install" ]
 then
       case $XASH_INSTALL_TYPE in
         server)
-          echo "= Creating start.sh script for dedicated server in $XASH_INSTALL_DIR ="
+          message info "Creating start.sh script for dedicated server in ${YELLOW}${XASH_INSTALL_DIR}${ENDCOLOR}"
+          # all 0.19 xash3d versions are using +port and 0.20 -port 
           case $XASH_INSTALL_VERSION in
             0.19)
               lol="+port"
@@ -262,10 +329,12 @@ then
             ;;
           esac
           echo "#!/bin/bash
-screen -d -m -S xash_${XASH_INSTALL_VERSION}_${XASH_DS_PORT} ./xash +ip 0.0.0.0 ${lol} ${XASH_DS_PORT} -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg
+./xash +ip 0.0.0.0 ${lol} ${XASH_DS_PORT} -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg
 echo screenname xash_${XASH_INSTALL_VERSION}_${XASH_DS_PORT}" > $XASH_INSTALL_DIR/start.sh
+          checkerror $?
 
           chmod +x $XASH_INSTALL_DIR/start.sh
+          checkerror $?
           
           echo "After=network.target
 
@@ -279,10 +348,11 @@ ExecStop=/bin/kill -9 \$MAINPID
 
 [Install]
 WantedBy=multi-user.target" > $XASH_INSTALL_DIR/xashds_${XASH_INSTALL_VERSION}_${XASH_DS_PORT}.service
+          checkerror $?
           
           touch $XASH_INSTALL_DIR/valve/listip.cfg
           touch $XASH_INSTALL_DIR/valve/banned.cfg
-          echo "= If you need an example config for a public server, have a look into https://github.com/FWGS/xashds-docker/tree/master/valve ="
+          message info "If you need an example config for a public server, have a look into ${YELLOW}https://github.com/FWGS/xashds-docker/tree/master/valve${ENDCOLOR}"
         ;;
         
         client)
@@ -296,9 +366,28 @@ Type=Application
 StartupNotify=false
 Categories=Game;
 X-Desktop-File-Install-Version=0.24" > $XASH_INSTALL_DIR/Xash3D_${XASH_INSTALL_VERSION}.desktop
+          checkerror $?
         ;;
       esac
 fi
 
-echo "= DONE! If everything went well an no errors occured you can just run your game/server from $XASH_INSTALL_DIR ="
-echo "= starting server: ./start.sh ; starting game client ./xash3d ="
+
+
+case $XASH_INSTALLATION_MODE in
+  install)
+    message info "${GREEN}DONE!!${ENDCOLOR} Installation completed without erros."
+    message info "Your ready to run Xash3D installation is located in"
+    message info "${YELLOW}${XASH_INSTALL_DIR}${ENDCOLOR}"
+    case $XASH_INSTALLATION_TYPE in
+      client)
+        message info "You can run the game with ${YELLOW}'./xash3d'${ENDCOLOR} from the install location"
+      ;;
+      server)
+        message info "You can start the server with ${YELLOW}'./start.sh'${ENDCOLOR} from the install location"
+      ;;
+    esac
+  ;;
+  update)
+    message info "${GREEN}DONE!!${ENDCOLOR} Update completed without errors."
+  ;;
+esac
