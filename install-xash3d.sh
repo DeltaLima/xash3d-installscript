@@ -178,6 +178,11 @@ case $XASH_INSTALL_MODE in
     git clone --recursive $XASH_GIT_URL
     checkerror $?
     test -d ${XASH_GIT_DIR} || mkdir -p ${XASH_GIT_DIR}/bin/
+    if [ ! -d ${XASH_GIT_DIR}/bin ]
+    then
+      mkdir -p ${XASH_GIT_DIR}/bin && message info "created ${YELLOW}${XASH_GIT_DIR}/bin${ENDCOLOR}"
+      checkerror $?
+    fi
     checkerror $?
     case $XASH_INSTALL_VERSION in
       0.19)
