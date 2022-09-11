@@ -184,7 +184,7 @@ quit" > $XASH3D_BASEDIR/steam/hlds.install
 	## run half-life download from steam server with steamcmd
 	## If grep find Error then fetch the hlds zip from github
 	echo "= This can take a while depending ony your connection ="
-	if ./steamcmd.sh +runscript hlds.install | grep Error
+	if ! true #./steamcmd.sh +runscript hlds.install | grep Error
 	then
 	    echo "= !! There was an error fetching hlds with steamcmd. Fetching it from github !! ="
 	    echo $hlds_url
@@ -226,7 +226,7 @@ then
           echo "= Creating start.sh script for dedicated server in build/result ="
           case $XASH_INSTALL_VERSION in
             0.19)
-              echo -e "#!/bin/bash\n./xash +ip 0.0.0.0 +port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_RESULTDIR/start.sh
+              echo -e "#!/bin/bash\nscreen -d -m -S xash_${XASH_INSTALL_VERSION}_${XASHDS_PORT} ./xash +ip 0.0.0.0 +port ${XASHDS_PORT} -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_RESULTDIR/start.sh
             ;;
             0.20)
               echo -e "#!/bin/bash\n./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_RESULTDIR/start.sh
