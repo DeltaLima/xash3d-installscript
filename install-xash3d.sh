@@ -232,7 +232,9 @@ then
               lol="-port"
             ;;
           esac
-          echo -e "#!/bin/bash\nscreen -d -m -S xash_${XASH_INSTALL_VERSION}_${XASHDS_PORT} ./xash +ip 0.0.0.0 ${lol} ${XASHDS_PORT} -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_RESULTDIR/start.sh
+          echo "#!/bin/bash
+screen -d -m -S xash_${XASH_INSTALL_VERSION}_${XASHDS_PORT} ./xash +ip 0.0.0.0 ${lol} ${XASHDS_PORT} -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg
+echo screenname xash_${XASH_INSTALL_VERSION}_${XASHDS_PORT}" > $XASH3D_RESULTDIR/start.sh
 
           chmod +x $XASH3D_BASEDIR/result/start.sh
           touch $XASH3D_RESULTDIR/valve/listip.cfg
