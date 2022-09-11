@@ -105,6 +105,7 @@ export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig
 echo "= Creating directories ="
 XASH_GIT_DIR="$(echo ${XASH_GIT_URL} | cut -d / -f5)"
 test -d $XASH_INSTALL_DIR || mkdir -p $XASH_INSTALL_DIR
+test -d $XASH_BUILD_DIR || mkdir -p $XASH_BUILD_DIR
 
 if [ "$XASH_INSTALL_MODE" == "install" ]
 then
