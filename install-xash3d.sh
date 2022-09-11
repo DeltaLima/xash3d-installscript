@@ -132,8 +132,7 @@ case $OS in
       *)
         PACKAGES_OSSPECIFIC="lib32gcc1-s1"
       ;;
-      
-    
+    esac
   ;;
 esac
 
