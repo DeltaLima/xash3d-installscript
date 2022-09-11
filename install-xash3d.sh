@@ -237,6 +237,20 @@ screen -d -m -S xash_${XASH_INSTALL_VERSION}_${XASHDS_PORT} ./xash +ip 0.0.0.0 $
 echo screenname xash_${XASH_INSTALL_VERSION}_${XASHDS_PORT}" > $XASH3D_RESULTDIR/start.sh
 
           chmod +x $XASH3D_BASEDIR/result/start.sh
+          
+          echo "After=network.target
+
+[Service]
+User=$(whoami)
+WorkingDirectory=${XASH3D_RESULTDIR}
+Type=oneshot
+#StandardOutput=journal
+ExecStart=${XASH3D_RESULTDIR}/start.sh
+ExecStop=/bin/kill -9 \$MAINPID
+
+[Install]
+WantedBy=multi-user.target" > $XASH3D_RESULTDIR/xashds_${XASH_INSTALL_VERSION}_${XASHDS_PORT}.service
+          
           touch $XASH3D_RESULTDIR/valve/listip.cfg
           touch $XASH3D_RESULTDIR/valve/banned.cfg
           echo "= If you need an example config for a public server, have a look into https://github.com/FWGS/xashds-docker/tree/master/valve ="
