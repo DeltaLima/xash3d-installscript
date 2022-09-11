@@ -370,14 +370,13 @@ WantedBy=multi-user.target" > $XASH_INSTALL_DIR/xashds_${XASH_INSTALL_VERSION}_$
 Name=Xash3D ${XASH_INSTALL_VERSION}
 GenericName=Half-Life
 Comment=OpenSource Half-Life Engine
-Exec=${XASH_INSTALL_VERSION}/xash3d
-Icon=${XASH_INSTALL_VERSION}/icon-xash-material.ico
+Exec=${XASH_INSTALL_DIR}/xash3d
+Icon=${XASH_INSTALL_DIR}/icon-xash-material.ico
 Terminal=false
 Type=Application
 StartupNotify=false
 Categories=Game;
-X-Desktop-File-Install-Version=0.24
-" > $XASH_INSTALL_DIR/Xash3D_$(echo ${XASH_INSTALL_VERSION} | sed 's/\.//').desktop
+X-Desktop-File-Install-Version=0.24" > $XASH_INSTALL_DIR/Xash3D_$(echo ${XASH_INSTALL_VERSION} | sed 's/\.//').desktop
           checkerror $?
         ;;
       esac
@@ -393,6 +392,8 @@ case $XASH_INSTALL_MODE in
     case $XASH_INSTALL_TYPE in
       client)
         message info "You can run the game with ${YELLOW}'./xash3d'${ENDCOLOR} from the install location"
+        message info "To install the game into your applications menu, run:"
+        message info "${YELLOW}'desktop-file-install --dir=\$HOME/.local/share/applications ${XASH_INSTALL_DIR}/Xash3D_$(echo $XASH_INSTALL_VERSION | sed 's/\.//').desktop'${ENDCOLOR}"
       ;;
       server)
         message info "You can start the server with ${YELLOW}'./start.sh'${ENDCOLOR} from the install location"
