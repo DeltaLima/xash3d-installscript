@@ -220,8 +220,8 @@ then
       echo "= Creating start.sh script for dedicated server in build/result ="
       echo "./xash +ip 0.0.0.0 -port $XASHDS_PORT -pingboost 1 -timeout 3 +map boot_camp +exec server.cfg" > $XASH3D_BASEDIR/result/start.sh
       chmod +x $XASH3D_BASEDIR/result/start.sh
-	  touch $XASH3D_BASEDIR/result/valve/listip.cfg
-      touch $XASH3D_BASEDIR/result/valve/banned.cfg
+      touch $XASH3D_RESULTDIR/valve/listip.cfg
+      touch $XASH3D_RESULTDIR/valve/banned.cfg
       echo "= If you need an example config for a public server, have a look into https://github.com/FWGS/xashds-docker/tree/master/valve ="
 fi
 
