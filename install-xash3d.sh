@@ -15,7 +15,7 @@ do
   
   if [ -z ${!xashvarname} ]
   then
-    case ${!xashvar} in
+    case ${xashvar} in
       BUILD_DIR) XASH_BUILD_DIR=$(pwd)/build ;;
       INSTALL_DIR) XASH_INSTALL_DIR=$(pwd)/xash3d ;;
       DS_PORT) XASH_DS_PORT=27015 ;;
