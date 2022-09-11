@@ -21,13 +21,13 @@ fi
 showhelp() {
       echo "Usage: ./$0 [server|client] [install|update] [0.19|0.20]"
       echo ""
-      echo "Description: Script to install an Xash3D-FWGS client or Xash3D dedicated server with game data from steamcmd"
+      echo "Description: Script to install an Xash3D engine full game client or dedicated server with game data from steamcmd"
       echo "Server tested on Debian 11 ; Client tested on Ubuntu 20.04"
-      echo "Origin: https://git.la10cy.net/DeltaLima/xash3ds-installscript"
+      echo "Origin: https://git.la10cy.net/DeltaLima/xash3d-installscript"
       echo ""
       echo "Resources we are using:"
-      echo $steamcmd_url
-      echo $hlds_url
+      echo "$steamcmd_url"
+      echo "$hlds_url"
       echo "0.20: https://github.com/FWGS/xash3d-fwgs"
       echo "0.19: https://gitlab.com/tyabus/xash3d"
       exit 1
