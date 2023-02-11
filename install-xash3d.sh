@@ -96,7 +96,8 @@ case $3 in
 	;;
         
 	"0.20")
-        XASH_GIT_URL="https://github.com/FWGS/xash3d-fwgs"
+        #XASH_GIT_URL="https://github.com/FWGS/xash3d-fwgs"
+        XASH_GIT_URL="https://github.com/kungfulon/xash3d-fwgs"
 	;;
   
 	*)
@@ -222,7 +223,9 @@ case $XASH_INSTALL_MODE in
     case $XASH_INSTALL_VERSION in
       0.19)
         cd bin
-        cmake --cmake-clean-cache ../
+        #old cmake from ubuntu 20.04
+	#cmake --cmake-clean-cache ../
+#        cmake --clean-first ../
         checkerror $?
         cd ../
         if [ "$(ls -A bin)" ]
@@ -235,8 +238,8 @@ case $XASH_INSTALL_MODE in
         cd bin        
       ;;
       0.20)
-        ./waf clean
-        checkerror $?
+        #./waf clean
+        #checkerror $?
         if [ "$(ls -A bin)" ]
         then
           rm -Rf bin/*
