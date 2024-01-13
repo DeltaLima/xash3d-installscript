@@ -138,7 +138,7 @@ case $OS in
   ;;
 esac
 
-XASH_APT_PACKAGES="${PACKAGES_OSSPECIFIC} g++-multilib git curl build-essential cmake zip xz-utils libstdc++6:i386 gnupg2 gcc-multilib ca-certificates python3"
+XASH_APT_PACKAGES="${PACKAGES_OSSPECIFIC} g++-multilib git curl build-essential cmake zip xz-utils libstdc++6:i386 gnupg2 gcc-multilib ca-certificates python-is-python3"
 case $1 in 
 	"client")
         XASH_APT_PACKAGES+=" libsdl2-dev:i386 libfreetype6-dev:i386 libfontconfig-dev:i386"
