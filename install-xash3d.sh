@@ -96,8 +96,9 @@ case $3 in
 	;;
         
 	"0.20")
-        #XASH_GIT_URL="https://github.com/FWGS/xash3d-fwgs"
-        XASH_GIT_URL="https://github.com/kungfulon/xash3d-fwgs"
+        XASH_GIT_URL="https://github.com/FWGS/xash3d-fwgs"
+        ## wtf did i here lol
+        #XASH_GIT_URL="https://github.com/kungfulon/xash3d-fwgs"
 	;;
   
 	*)
@@ -137,7 +138,7 @@ case $OS in
   ;;
 esac
 
-XASH_APT_PACKAGES="${PACKAGES_OSSPECIFIC} g++-multilib git curl build-essential cmake zip xz-utils libstdc++6:i386 gnupg2 gcc-multilib ca-certificates python"
+XASH_APT_PACKAGES="${PACKAGES_OSSPECIFIC} g++-multilib git curl build-essential cmake zip xz-utils libstdc++6:i386 gnupg2 gcc-multilib ca-certificates python3"
 case $1 in 
 	"client")
         XASH_APT_PACKAGES+=" libsdl2-dev:i386 libfreetype6-dev:i386 libfontconfig-dev:i386"
@@ -147,7 +148,7 @@ case $1 in
           ;;
           
           0.20)
-            WAF_OPTIONS="--enable-utils --enable-stb"
+            WAF_OPTIONS=""
           ;;
         esac
 
@@ -396,7 +397,7 @@ WantedBy=multi-user.target" > $XASH_INSTALL_DIR/xashds_${XASH_INSTALL_VERSION}_$
 Name=Xash3D ${XASH_INSTALL_VERSION}
 GenericName=Half-Life
 Comment=OpenSource Half-Life Engine
-Exec=${XASH_INSTALL_DIR}/xash3d
+Exec=${XASH_INSTALL_DIR}/start-xash3d.sh
 Icon=${XASH_INSTALL_DIR}/icon-xash-material.ico
 Terminal=false
 Type=Application
@@ -404,6 +405,11 @@ StartupNotify=false
 Categories=Game;
 X-Desktop-File-Install-Version=0.24" > $XASH_INSTALL_DIR/Xash3D_$(echo ${XASH_INSTALL_VERSION} | sed 's/\.//').desktop
           checkerror $?
+          echo "#!/bin/sh
+export LD_LIBRARY_PATH=/lib32:/lib64:/lib:${XASH_INSTALL_DIR}
+
+${XASH_INSTALL_DIR}/xash3d" > $XASH_INSTALL_DIR/start-xash3d.sh
+        chmod +x $XASH_INSTALL_DIR/start-xash3d.sh
         ;;
       esac
 fi
