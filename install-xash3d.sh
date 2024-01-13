@@ -271,7 +271,7 @@ case $XASH_INSTALL_VERSION in
   0.20)
     ./waf configure -T release $WAF_OPTIONS
     checkerror $?
-    ./waf -p build
+    ./waf build
     checkerror $?
     ./waf install --destdir=bin/
     checkerror $?
