@@ -330,7 +330,8 @@ case $XASH_INSTALL_VERSION in
     cd $XASH_BUILD_DIR/$XASH_GIT_DIR/bin
     case $XASH_INSTALL_TYPE in
       server)
-        cp -R engine/xash3d $XASH_INSTALL_DIR/xash
+        # old cp -R engine/xash3d $XASH_INSTALL_DIR/xash
+        cp -R build/xash3d/bin/engine/xash3d $XASH_INSTALL_DIR/xash
         checkerror $?
       ;;
       client)
