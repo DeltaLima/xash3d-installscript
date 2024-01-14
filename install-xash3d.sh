@@ -327,7 +327,7 @@ message info "copy xash3d binaries to ${YELLOW}${XASH_INSTALL_DIR}${ENDCOLOR}"
 
 case $XASH_INSTALL_VERSION in
   0.19)
-    #cd $XASH_BUILD_DIR/$XASH_GIT_DIR/bin
+    cd $XASH_BUILD_DIR/$XASH_GIT_DIR/bin
     case $XASH_INSTALL_TYPE in
       server)
         cp -R engine/xash3d $XASH_INSTALL_DIR/xash
