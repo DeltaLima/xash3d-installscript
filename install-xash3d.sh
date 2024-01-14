@@ -216,7 +216,7 @@ case $XASH_INSTALL_MODE in
       0.20)
         cd ${XASH_GIT_DIR}
         # as of 14.01.2024 master branch does not compile , going back to last known working commit
-        git checkout 0132eb6e44cb4a414d400c9ba42e5b4a94dcb590 # last with xash binary # last compiles 5ac8f63741c25c73ab771fb10211a320031c12dd
+        test "$XASH_INSTALL_TYPE" == "server" && git checkout 0132eb6e44cb4a414d400c9ba42e5b4a94dcb590 # last with xash binary # last compiles 5ac8f63741c25c73ab771fb10211a320031c12dd
       ;;
     esac
 		
@@ -249,7 +249,7 @@ case $XASH_INSTALL_MODE in
           checkerror $?
         fi
         checkerror $?
-        ### git pull
+        test "$XASH_INSTALL_TYPE" != "server" && git pull
         checkerror $?
       ;;
     esac
