@@ -215,6 +215,8 @@ case $XASH_INSTALL_MODE in
       ;;
       0.20)
         cd ${XASH_GIT_DIR}
+        # as of 14.01.2024 master branch does not compile , going back to last known working commit
+        git checkout 5ac8f63741c25c73ab771fb10211a320031c12dd
       ;;
     esac
 		
