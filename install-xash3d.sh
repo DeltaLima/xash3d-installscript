@@ -50,13 +50,15 @@ XASH_INSTALL_DIR, XASH_DS_PORT and XASH_BUILD_DIR
 
 Example:
 
-1) Install server version '0.19' into '~/opt/xashds_oldengine'
 
-  XASH_INSTALL_DIR=~/opt/xashds_old $0 server install 0.19
-
-2) Update client version 0.20 located in ~/Games/Xash3D where the build directory is as well
+2) Install client version 0.20 located in ~/Games/Xash3D where the build directory is as well
   
-  XASH_INSTALL_DIR=~/Games/Xash3D XASH_BUILD_DIR=\$XASH_INSTALL_DIR/build $0 client update 0.20
+  XASH_INSTALL_DIR=~/Games/Xash3D XASH_BUILD_DIR=\$XASH_INSTALL_DIR/build $0 client install 0.20
+  
+2) Install server version '0.19' into '~/opt/xashds_oldengine'
+
+  XASH_INSTALL_DIR=~/opt/xashds_old $0 server update 0.19
+
 
 Resources we are using:
 $steamcmd_url
