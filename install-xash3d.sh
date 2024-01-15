@@ -249,8 +249,9 @@ case $XASH_INSTALL_MODE in
           checkerror $?
         fi
         checkerror $?
-        test "$XASH_INSTALL_TYPE" != "server" && git pull
-        #checkerror $?
+        #test "$XASH_INSTALL_TYPE" != "server" && 
+        git pull
+        checkerror $?
       ;;
     esac
     
