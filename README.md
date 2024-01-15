@@ -36,12 +36,13 @@ https://github.com/DevilBoy-eXe/hlds/releases/download/8684/hlds_build_8684.zip
 
 To install the server run following command in the directory where you checked this git into
 ```
-./install-xash3ds.sh server install 0.20 # v0.19 is broken atm
+./install-xash3ds.sh server install [Version]
 ```
 
 To install the FULL PLAYABLE client with all game data (steamcmd thx <3) run this
+Version 0.19 is actually broken as client, please use `0.20`
 ```
-./install-xash3ds.sh client install [Version]
+./install-xash3ds.sh client install 0.20 
 ```
 
 Your server or gamefiles (you can run server first and then rerun afterwards with client to get the full package) are in
