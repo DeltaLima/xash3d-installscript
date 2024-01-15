@@ -2,7 +2,7 @@
 
 Origin of this is https://git.la10cy.net/DeltaLima/xash3d-installscript
 
-This script install an ready to run Half-Life Xash3D Game client or dedicated server under Ubuntu 20.04 and Debian 11 (those i tested so far) by downloading game data from steam directly with the free steamcmd tool from valve.
+This script install an ready to run Half-Life Xash3D Game client or dedicated server under Debian 11/12 and Ubuntu 20.04 (those i tested so far) by downloading game data from steam directly with the free steamcmd tool from valve.
 Just run the script and play :) 
 
 ```
