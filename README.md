@@ -18,7 +18,7 @@ XASH_INSTALL_DIR, XASH_DS_PORT and XASH_BUILD_DIR
 Example:
 
 
-2) Install client version 0.20 located in ~/Games/Xash3D where the build directory is as well
+1) Install client version 0.20 located in ~/Games/Xash3D where the build directory is as well
   
   XASH_INSTALL_DIR=~/Games/Xash3D XASH_BUILD_DIR=$XASH_INSTALL_DIR/build ./install-xash3d.sh client install 0.20
   
