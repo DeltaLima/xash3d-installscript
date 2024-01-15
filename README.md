@@ -42,13 +42,13 @@ To install the server run following command in the directory where you checked t
 To install the FULL PLAYABLE client with all game data (steamcmd thx <3) run 
 
 ```
-./install-xash3ds.sh client install 0.20 
+./install-xash3d.sh client install 0.20 
 ```
 (Version 0.19 is actually broken as client, please use `0.20`)
 
 Your server or gamefiles (you can run server first and then rerun afterwards with client to get the full package) are in
 ```
-/path/to/repo/xash3ds-installscript/build/result
+/path/to/repo/xash3d-installscript/xash3d
 ```
 
 from there you can run the server 
@@ -63,7 +63,7 @@ or the game to have a frag
 
 You can easly update both, client and server (example client):
 ```
-./install-xash3d.sh client update [Version]
+./install-xash3d.sh client update 0.20
 ```
 
 Have a look on my servers at https://HL.LA10CY.NET :) Happy fragging!
