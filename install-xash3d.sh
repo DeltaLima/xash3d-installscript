@@ -432,7 +432,7 @@ case $XASH_INSTALL_MODE in
     message info "${YELLOW}${XASH_INSTALL_DIR}${ENDCOLOR}"
     case $XASH_INSTALL_TYPE in
       client)
-        message info "You can run the game with ${YELLOW}'./xash3d'${ENDCOLOR} from the install location"
+        message info "You can run the game with ${YELLOW}'./start-xash3d.sh'${ENDCOLOR} from the install location"
         message info "To install the game into your applications menu, run:"
         message info "${YELLOW}'desktop-file-install --dir=\$HOME/.local/share/applications ${XASH_INSTALL_DIR}/Xash3D_$(echo $XASH_INSTALL_VERSION | sed 's/\.//').desktop'${ENDCOLOR}"
       ;;
