@@ -144,6 +144,9 @@ case $1 in
         XASH_APT_PACKAGES+=" libsdl2-dev:i386 libfreetype6-dev:i386 libfontconfig-dev:i386"
         case $XASH_INSTALL_VERSION in
           0.19)
+            message warn "!! Client in version 0.19 does not work at the moment! !!"
+            message warn "!! press enter to continue, or STRG+C to abort. !!"
+            read -p "> "
             CMAKE_OPTIONS='-DXASH_DOWNLOAD_DEPENDENCIES=yes -DXASH_STATIC=ON -DXASH_DLL_LOADER=ON -DXASH_VGUI=ON -DMAINUI_USE_STB=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"'
           ;;
           
