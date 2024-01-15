@@ -250,7 +250,7 @@ case $XASH_INSTALL_MODE in
         fi
         checkerror $?
         test "$XASH_INSTALL_TYPE" != "server" && git pull
-        checkerror $?
+        #checkerror $?
       ;;
     esac
     
