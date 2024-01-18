@@ -31,6 +31,7 @@ hlds_url="https://github.com/DevilBoy-eXe/hlds/releases/download/$hlds_build/hld
 metamod_url="https://github.com/mittorn/metamod-p/releases/download/1/metamod.so"
 amxmod_url="http://www.amxmodx.org/release/amxmodx-$amxmod_version-base-linux.tar.gz"
 jk_botti_url="http://koti.kapsi.fi/jukivili/web/jk_botti/jk_botti-$jk_botti_version-release.tar.xz"
+cs16_client_url="https://github.com/Velaron/cs16-client"
 
 # colors for colored output 8)
 RED="\e[31m"

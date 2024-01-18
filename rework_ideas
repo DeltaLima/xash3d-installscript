@@ -1,0 +1,9 @@
+arguments!
+==========
+
+-m Mode: server, client
+-d Dest: path
+-v vers: 0.19, 0.20 < default
+-b builddir: path < default
+-c cs16: bool < default
+
