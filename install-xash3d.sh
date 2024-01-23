@@ -191,7 +191,7 @@ then
   checkerror $?
 fi
 
-if [ "$XASH_INSTALL_MODE" == "install" ]
+if [ "$XASH_INSTALL_MODE" == "install" ] && [ ! $NOAPT ]
 then
 	message info "Performing apt install"
 	sudo dpkg --add-architecture i386
